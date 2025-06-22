@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Backend should be written in Python - main script should be python app.py.
+
+
+All backend things should be in the backend folder.

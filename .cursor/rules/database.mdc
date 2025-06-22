@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Databases should be made in SQL Databases, and uses best practises regarding SQL.

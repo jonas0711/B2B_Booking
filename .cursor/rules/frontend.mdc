@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Alle frontend should be in JS - the frontend should run via node server.js.
+
+All frontend files should be in the frontend folder.
+
+
+It shoulde be in html and css too. JS should interact with backend.

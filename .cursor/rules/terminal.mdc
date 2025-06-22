@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Når du vil køre backend server skal du køre det således: cd backend; python app.py
+
+
+Når du vil køre frontend skla du køre det således: cd frontend; node server.js

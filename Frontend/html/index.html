@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordisk Film - Booking System</title>
+    <!-- CSS organiseret i separate filer - forbedret farvepalette -->
+    <link rel="stylesheet" href="../css/colors.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/bookings.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <!-- Header med Nordisk Film logo og create knap -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="../assets/logo.png" alt="Nordisk Film Logo" class="logo-image">
+                <div class="logo-text">
+                    <h1>NORDISK FILM</h1>
+                    <p>B2B Booking System</p>
+                </div>
+            </div>
+            <a href="create-booking" class="create-btn" title="Opret ny booking">
+                +
+            </a>
+        </div>
+    </header>
+
+    <!-- Hovedindhold container -->
+    <main class="container">
+        <!-- Dashboard statistikker - tilføjet data-type for ikoner -->
+        <section class="stats-grid">
+            <div class="stat-card" data-type="total">
+                <div class="stat-number" id="totalBookings">0</div>
+                <div class="stat-label">Total Bookinger</div>
+            </div>
+            <div class="stat-card" data-type="pending">
+                <div class="stat-number" id="pendingBookings">0</div>
+                <div class="stat-label">Ventende</div>
+            </div>
+            <div class="stat-card" data-type="confirmed">
+                <div class="stat-number" id="confirmedBookings">0</div>
+                <div class="stat-label">Bekræftet</div>
+            </div>
+            <div class="stat-card" data-type="completed">
+                <div class="stat-number" id="completedBookings">0</div>
+                <div class="stat-label">Afsluttet</div>
+            </div>
+        </section>
+
+        <!-- Booking oversigt sektion -->
+        <section class="bookings-section">
+            <div class="section-header">
+                <h2 class="section-title">Aktuelle Bookinger</h2>
+                <!-- Sorterings dropdown -->
+                <div class="sort-controls">
+                    <label for="sortSelect">Sorter efter:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="booking_date">Dato</option>
+                        <option value="title">Titel</option>
+                        <option value="client_name">Klient</option>
+                        <option value="status">Status</option>
+                        <option value="created_at">Oprettet</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Container til booking kort -->
+            <div class="bookings-grid" id="bookingsContainer">
+                <div class="empty-bookings">
+                    <h3>Ingen bookinger fundet</h3>
+                    <p>Opret din første booking ved at klikke på plus knappen</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <!-- JavaScript organiseret i separate filer -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/bookings.js"></script>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html> 

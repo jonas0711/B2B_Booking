@@ -1,0 +1,344 @@
+/* Booking oversigt sektion - forbedret med ny farvepalette */
+.bookings-section {
+    background: var(--bg-glass-gradient);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Section header styling flyttet til dropdown.css for bedre organisation */
+
+/* Booking cards - forbedret design */
+.bookings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.booking-card {
+    background: var(--bg-glass-gradient);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+    transition: var(--transition-normal);
+    border: 1px solid var(--border-light);
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-large);
+    border-color: var(--border-accent);
+}
+
+.booking-header {
+    background: var(--overlay-light);
+    backdrop-filter: var(--backdrop-blur);
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.booking-info {
+    flex-grow: 1;
+}
+
+.booking-title {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.booking-client {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: 1rem;
+    color: var(--secondary-gold);
+    font-weight: 500;
+}
+
+.booking-email {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.booking-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.edit-btn {
+    background: var(--bg-secondary-gradient);
+    color: var(--text-inverse);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-full);
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: var(--shadow-small);
+}
+
+.edit-btn:hover {
+    background: var(--secondary-copper);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-glow);
+}
+
+.booking-details {
+    padding: 20px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Progress section */
+.progress-section {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background: var(--overlay-light);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-medium);
+    border: 1px solid var(--border-light);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progress-count {
+    font-size: 0.85rem;
+    color: var(--secondary-gold);
+    font-weight: 600;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--gray-700);
+    border-radius: var(--radius-small);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--bg-secondary-gradient);
+    transition: var(--transition-slow);
+    border-radius: var(--radius-small);
+}
+
+/* Confirmation badges */
+.confirmation-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.confirmation-badge {
+    background: var(--gray-600);
+    color: var(--text-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-large);
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: var(--transition-normal);
+}
+
+.confirmation-badge.confirmed {
+    background: var(--success);
+    color: var(--text-primary);
+    transform: scale(1.05);
+}
+
+.confirmation-badge.special {
+    background: var(--bg-secondary-gradient);
+    color: var(--text-inverse);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.booking-description {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-light);
+}
+
+.booking-description .detail-label {
+    margin-bottom: var(--spacing-sm);
+}
+
+.booking-description .detail-value {
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+/* Status badges */
+.status-badge {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-xl);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    border: 1px solid transparent;
+    backdrop-filter: var(--backdrop-blur);
+}
+
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+.status-pending {
+    background: var(--warning);
+    color: var(--text-inverse);
+    border-color: var(--warning-light);
+}
+
+.status-confirmed {
+    background: var(--info);
+    color: var(--text-primary);
+    border-color: var(--info-light);
+}
+
+.status-completed {
+    background: var(--success);
+    color: var(--text-primary);
+    border-color: var(--success-light);
+}
+
+.status-cancelled {
+    background: var(--error);
+    color: var(--text-primary);
+    border-color: var(--error-light);
+}
+
+/* Empty state - forbedret styling flyttet til dropdown.css */
+
+/* Loading state */
+.loading {
+    text-align: center;
+    padding: 40px;
+    grid-column: 1 / -1;
+}
+
+.loading h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--secondary-gold);
+}
+
+/* Section header styling flyttet til dropdown.css for bedre organisation */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .bookings-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .booking-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .booking-actions {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .detail-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .confirmation-grid {
+        gap: 4px;
+    }
+    
+    .confirmation-badge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+    
+    /* Section header responsive styling nu i dropdown.css */
+}
+
+@media (max-width: 480px) {
+    .booking-card {
+        margin: 0 -10px;
+        border-radius: 8px;
+    }
+    
+    .booking-header,
+    .booking-details {
+        padding: 15px;
+    }
+    
+    .booking-title {
+        font-size: 1.1rem;
+    }
+    
+    .progress-section {
+        padding: 12px;
+    }
+} 

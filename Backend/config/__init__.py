@@ -1,0 +1,1 @@
+# Config pakke til Nordisk Film Booking System 

@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Organiser altid filer i mapper i henholdsvis backend og frontend mapperne. Sørg for at alle funktioner har deres egen kodefiler. Kodefiler skal opdeles i flere for at undgå de bliver for store. Undgå enkelt kodefiler på flere tusinde linjer.

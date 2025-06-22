@@ -1,0 +1,358 @@
+/* Moderne Dropdown og UI Komponenter - Nordisk Film Brand */
+
+/* Select/Dropdown styling */
+.sort-select,
+.custom-select {
+    position: relative;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: var(--backdrop-blur);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    padding-right: var(--spacing-2xl); /* Plads til pil */
+    color: #ffffff !important; /* Sikrer hvid tekst */
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    appearance: none; /* Fjern standard browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff'%3E%3Cpath d='M8 12L2 6h12l-6 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-sm) center;
+    background-size: 16px;
+    min-width: 140px;
+    box-shadow: var(--shadow-small);
+}
+
+.sort-select:hover,
+.custom-select:hover {
+    border-color: var(--border-medium);
+    box-shadow: var(--shadow-medium);
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+}
+
+.sort-select:focus,
+.custom-select:focus {
+    outline: none;
+    border-color: var(--secondary-gold);
+    box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.2);
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff !important;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff'%3E%3Cpath d='M8 12L2 6h12l-6 6z'/%3E%3C/svg%3E");
+}
+
+/* Dropdown option styling */
+.sort-select option,
+.custom-select option {
+    background: var(--primary-dark) !important;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Sort controls container */
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-large);
+    border: 1px solid var(--border-light);
+    backdrop-filter: var(--backdrop-blur);
+}
+
+.sort-controls label {
+    font-size: 0.9rem;
+    color: #ffffff !important; /* Hvid tekst for bedre kontrast */
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Section header forbedringer */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--bg-glass-gradient);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-large);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-header::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--bg-secondary-gradient);
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff !important; /* Fallback hvid tekst */
+    margin: 0;
+    background: var(--bg-secondary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Browser fallback for gradient text */
+@supports not (-webkit-background-clip: text) {
+    .section-title {
+        color: #ffffff !important;
+        background: none !important;
+    }
+}
+
+.section-title::before {
+    content: '📋';
+    font-size: 1.2rem;
+    filter: grayscale(0.3);
+}
+
+/* Empty state styling forbedring */
+.empty-bookings {
+    text-align: center;
+    padding: var(--spacing-3xl);
+    background: var(--bg-glass-gradient);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-xl);
+    border: 2px dashed var(--border-medium);
+    margin: var(--spacing-lg) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-bookings::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-secondary-gradient);
+    opacity: 0.05;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.empty-bookings h3 {
+    font-size: 1.4rem;
+    color: #ffffff !important; /* Hvid tekst for bedre kontrast */
+    margin-bottom: var(--spacing-md);
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.empty-bookings p {
+    color: rgba(255, 255, 255, 0.9) !important; /* Næsten hvid tekst */
+    font-size: 1rem;
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+    z-index: 1;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.empty-bookings::after {
+    content: '🎬';
+    display: block;
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.3;
+    position: relative;
+    z-index: 1;
+}
+
+/* Forbedret loading state */
+.bookings-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+    background: var(--bg-glass-gradient);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-light);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-light);
+    border-top: 3px solid var(--secondary-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+.loading-text {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Filter chips (for fremtidig brug) */
+.filter-chips {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.filter-chip {
+    background: rgba(249, 168, 37, 0.2);
+    color: var(--text-brand);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--secondary-gold);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.filter-chip:hover {
+    background: rgba(249, 168, 37, 0.3);
+    transform: translateY(-1px);
+}
+
+.filter-chip .remove {
+    background: none;
+    border: none;
+    color: var(--text-brand);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animationer */
+@keyframes pulse {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.1; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .sort-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .sort-select {
+        min-width: 120px;
+        flex: 1;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+        justify-content: center;
+    }
+    
+    .empty-bookings {
+        padding: var(--spacing-2xl);
+    }
+    
+    .empty-bookings h3 {
+        font-size: 1.2rem;
+    }
+    
+    .filter-chips {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .sort-controls {
+        padding: var(--spacing-sm);
+    }
+    
+    .sort-controls label {
+        font-size: 0.8rem;
+    }
+    
+    .sort-select {
+        font-size: 0.9rem;
+        padding: var(--spacing-xs) var(--spacing-md);
+        padding-right: var(--spacing-xl);
+    }
+    
+    .section-header {
+        padding: var(--spacing-md);
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+    }
+    
+    .empty-bookings::after {
+        font-size: 2rem;
+    }
+}
+
+/* Dark mode support (for fremtidig brug) */
+@media (prefers-color-scheme: dark) {
+    .sort-select,
+    .custom-select {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b39ddb'%3E%3Cpath d='M8 12L2 6h12l-6 6z'/%3E%3C/svg%3E");
+    }
+    
+    .sort-select:focus,
+    .custom-select:focus {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f9a825'%3E%3Cpath d='M8 12L2 6h12l-6 6z'/%3E%3C/svg%3E");
+    }
+} 
