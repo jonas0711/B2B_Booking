@@ -13,115 +13,202 @@
 /* Booking cards - forbedret design */
 .bookings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
 .booking-card {
-    background: var(--bg-glass-gradient);
-    backdrop-filter: var(--backdrop-blur);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-medium);
-    overflow: hidden;
-    transition: var(--transition-normal);
-    border: 1px solid var(--border-light);
-}
-
-/* Animation for smooth loading af booking kort */
-.booking-card.fade-in {
-    animation: fadeInUp 0.6s ease-out forwards;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    border: 2px solid #e0e6ed;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
     opacity: 0;
-    transform: translateY(20px);
+    animation: fadeIn 0.5s ease-out forwards;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    color: #333333; /* Sikrer mørk tekst på lys baggrund */
 }
 
-@keyframes fadeInUp {
+.booking-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 16px 16px 0 0;
+}
+
+.booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+    background: linear-gradient(145deg, #ffffff, #f0f4f8);
+}
+
+/* Status-baserede farver for booking kort */
+.booking-card.pending::before {
+    background: linear-gradient(90deg, #ffc107, #ff9800);
+}
+
+.booking-card.confirmed::before {
+    background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.booking-card.completed::before {
+    background: linear-gradient(90deg, #007bff, #17a2b8);
+}
+
+.booking-card.cancelled::before {
+    background: linear-gradient(90deg, #dc3545, #e74c3c);
+}
+
+.booking-card.archived::before {
+    background: linear-gradient(90deg, #6c757d, #495057);
+}
+
+/* Ekstra styling for arkiverede bookinger */
+.booking-card.archived {
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border-color: #adb5bd;
+}
+
+.booking-card.archived:hover {
+    background: linear-gradient(145deg, #f1f3f4, #e0e4e7);
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.booking-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-large);
-    border-color: var(--border-accent);
-}
-
 .booking-header {
-    background: var(--overlay-light);
-    backdrop-filter: var(--backdrop-blur);
-    padding: var(--spacing-lg);
-    border-bottom: 2px solid var(--border-accent);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
 .booking-info {
-    flex-grow: 1;
+    flex: 1;
 }
 
 .booking-title {
-    margin: 0 0 var(--spacing-sm) 0;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #2c3e50; /* Mørk blå-grå for god læsbarhed */
+    margin: 0 0 0.5rem 0;
     line-height: 1.3;
 }
 
 .booking-client {
-    margin: 0 0 var(--spacing-xs) 0;
     font-size: 1rem;
-    color: var(--secondary-gold);
+    color: #34495e; /* Mørk grå for god kontrast */
+    margin: 0 0 0.25rem 0;
     font-weight: 500;
 }
 
 .booking-email {
+    font-size: 0.875rem;
+    color: #7f8c8d; /* Medium grå for sublim tekst */
     margin: 0;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-style: italic;
+    opacity: 1; /* Fjern opacity for bedre synlighed */
 }
 
 .booking-actions {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
+    gap: 0.5rem;
 }
 
-.edit-btn {
-    background: var(--bg-secondary-gradient);
-    color: var(--text-inverse);
-    border: 1px solid var(--border-accent);
-    border-radius: var(--radius-full);
-    width: 35px;
-    height: 35px;
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: var(--transition-normal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    box-shadow: var(--shadow-small);
+    transition: all 0.2s ease;
+    border: none;
+    white-space: nowrap;
+}
+
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+.status-badge.pending {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.status-badge.confirmed {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.status-badge.completed {
+    background: var(--info-light);
+    color: var(--info-dark);
+}
+
+.status-badge.cancelled {
+    background: var(--error-light);
+    color: var(--error-dark);
+}
+
+.edit-btn, .archive-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
 }
 
 .edit-btn:hover {
-    background: var(--secondary-copper);
-    transform: scale(1.1);
-    box-shadow: var(--shadow-glow);
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.archive-btn:hover {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
 }
 
 .booking-details {
-    padding: 20px;
+    margin-bottom: 1rem;
 }
 
 .detail-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
 }
 
 .detail-item {
@@ -134,102 +221,100 @@
 }
 
 .detail-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: #95a5a6; /* Lys grå for labels */
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0.25rem;
 }
 
 .detail-value {
-    font-size: 0.95rem;
-    color: var(--text-primary);
+    font-size: 0.875rem;
+    color: #2c3e50; /* Mørk farve for værdier */
     font-weight: 500;
 }
 
-/* Progress section */
+/* Progress section - forbedret synlighed */
 .progress-section {
-    margin: var(--spacing-lg) 0;
-    padding: var(--spacing-md);
-    background: var(--overlay-light);
-    backdrop-filter: var(--backdrop-blur);
-    border-radius: var(--radius-medium);
-    border: 1px solid var(--border-light);
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 12px;
+    border: 2px solid #e3e8ed;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+    color: #2c3e50; /* Sikrer synlig tekst */
 }
 
 .progress-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.75rem;
 }
 
 .progress-label {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #7f8c8d; /* Synlig grå farve */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .progress-count {
-    font-size: 0.85rem;
-    color: var(--secondary-gold);
-    font-weight: 600;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #3498db; /* Synlig blå farve */
 }
 
 .progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--gray-700);
-    border-radius: var(--radius-small);
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--bg-secondary-gradient);
-    transition: var(--transition-slow);
-    border-radius: var(--radius-small);
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    border-radius: 3px;
+    transition: width 0.8s ease;
 }
 
 /* Confirmation badges */
 .confirmation-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 15px;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 .confirmation-badge {
-    background: var(--gray-600);
-    color: var(--text-primary);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-large);
+    padding: 4px 8px;
+    border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
-    transition: var(--transition-normal);
+    background: #ecf0f1; /* Lys grå baggrund */
+    color: #2c3e50; /* Mørk tekst */
+    border: 1px solid #bdc3c7;
+    transition: all 0.2s ease;
 }
 
 .confirmation-badge.confirmed {
-    background: var(--success);
-    color: var(--text-primary);
-    transform: scale(1.05);
+    background: #d5f4e6; /* Lys grøn */
+    color: #27ae60; /* Mørk grøn */
+    border-color: #27ae60;
 }
 
 .confirmation-badge.special {
-    background: var(--bg-secondary-gradient);
-    color: var(--text-inverse);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    background: #fdeaa7; /* Lys gul */
+    color: #f39c12; /* Orange */
+    border-color: #f39c12;
 }
 
 .booking-description {
-    margin-top: var(--spacing-md);
-    padding-top: var(--spacing-md);
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--border-light);
 }
 
@@ -242,99 +327,93 @@
     color: var(--text-primary);
 }
 
-/* Status badges */
-.status-badge {
-    padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: var(--radius-xl);
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    border: 1px solid transparent;
-    backdrop-filter: var(--backdrop-blur);
+/* Arkiv information styling jf. sedel */
+.archive-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--background-light);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
 }
 
-.status-badge:hover {
-    transform: scale(1.05);
+.archive-info .detail-label {
+    color: var(--secondary-color);
 }
 
-.status-pending {
-    background: var(--warning);
-    color: var(--text-inverse);
-    border-color: var(--warning-light);
+.archive-info a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.status-confirmed {
-    background: var(--info);
-    color: var(--text-primary);
-    border-color: var(--info-light);
+.archive-info a:hover {
+    text-decoration: underline;
 }
 
-.status-completed {
-    background: var(--success);
-    color: var(--text-primary);
-    border-color: var(--success-light);
-}
-
-.status-cancelled {
-    background: var(--error);
-    color: var(--text-primary);
-    border-color: var(--error-light);
-}
-
-/* Empty state - forbedret styling flyttet til dropdown.css */
-
-/* Loading state */
-.loading {
-    text-align: center;
-    padding: 40px;
+/* Tom bookings besked */
+.empty-bookings {
     grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
 }
 
-.loading h3 {
-    margin: 0 0 var(--spacing-sm) 0;
-    color: var(--secondary-gold);
+.empty-bookings h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
 
-/* Section header styling flyttet til dropdown.css for bedre organisation */
+.empty-bookings p {
+    font-size: 1rem;
+    opacity: 0.8;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
 
 /* Responsive design */
 @media (max-width: 768px) {
     .bookings-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 1rem;
+        padding: 0.5rem 0;
+    }
+    
+    .booking-card {
+        padding: 1rem;
     }
     
     .booking-header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+        align-items: stretch;
+        gap: 1rem;
     }
     
     .booking-actions {
         flex-direction: row;
-        align-items: center;
-        width: 100%;
         justify-content: space-between;
+        align-items: center;
     }
     
     .detail-row {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 0.75rem;
     }
     
     .confirmation-grid {
-        gap: 4px;
+        gap: 0.25rem;
     }
     
     .confirmation-badge {
-        font-size: 0.7rem;
+        font-size: 0.6875rem;
         padding: 3px 6px;
     }
     
-    /* Section header responsive styling nu i dropdown.css */
+    .progress-section {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
 }
 
 @media (max-width: 480px) {

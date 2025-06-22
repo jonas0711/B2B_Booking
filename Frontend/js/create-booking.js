@@ -83,7 +83,7 @@ async function handleFormSubmit(e) {
             
             // Navigerer tilbage til dashboard efter kort delay
             setTimeout(() => {
-                window.location.href = '/html/index.html';
+                window.location.href = '/';
             }, 1500);
         } else {
             console.error('API fejl ved booking oprettelse:', result.error);

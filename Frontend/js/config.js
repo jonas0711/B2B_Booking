@@ -4,15 +4,18 @@ console.log('Config.js indlæst - Globale indstillinger defineret');
 // API konfiguration
 const API_BASE_URL = 'http://localhost:5000';
 
-// Globale variabler til booking data
-let bookingsData = [];
+// Globale variabler til booking data - defineres i bookings.js
+// let bookingsData = []; // Flyttet til bookings.js for at undgå duplication
 
-// API endpoints
+// API endpoints - inkluderer arkiv funktionalitet
 const API_ENDPOINTS = {
     BASE: API_BASE_URL,
     HEALTH: '/',
     BOOKINGS: '/api/bookings',
-    UPDATE_STATUS: '/api/bookings/{id}/status'
+    ACTIVE_BOOKINGS: '/api/bookings/active',
+    ARCHIVED_BOOKINGS: '/api/bookings/archived',
+    UPDATE_STATUS: '/api/bookings/{id}/status',
+    ARCHIVE_BOOKING: '/api/bookings/{id}/archive'
 };
 
 // Status farver og labels

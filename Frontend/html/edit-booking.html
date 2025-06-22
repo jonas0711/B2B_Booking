@@ -1,1 +1,275 @@
- 
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rediger Booking - Nordisk Film</title>
+    <!-- CSS organiseret i separate filer -->
+    <link rel="stylesheet" href="../css/colors.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/bookings.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <!-- Header med navigation -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="../assets/logo.png" alt="Nordisk Film Logo" class="logo-image">
+                <div class="logo-text">
+                    <h1>NORDISK FILM</h1>
+                    <p>B2B Booking System</p>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Loading indikator -->
+    <div id="loadingIndicator" class="loading-container">
+        <div class="loading">
+            <h3>Indlæser booking data...</h3>
+            <p>Vent venligst</p>
+        </div>
+    </div>
+
+    <!-- Hovedindhold container -->
+    <main class="page-container" id="formContainer" style="display: none;">
+        <!-- Page header med tilbage knap -->
+        <div class="page-header">
+            <h1 id="pageTitle">Rediger Booking</h1>
+            <a href="/" class="back-btn">
+                ← Tilbage til Dashboard
+            </a>
+        </div>
+
+        <!-- Booking form container -->
+        <div class="form-container">
+            <form id="bookingForm">
+                <!-- Skjult booking ID -->
+                <input type="hidden" id="bookingId" name="bookingId">
+
+                <!-- Grundlæggende oplysninger sektion -->
+                <div class="form-section">
+                    <h3 class="section-title">Grundlæggende Oplysninger</h3>
+                    
+                    <!-- Booking titel -->
+                    <div class="form-group">
+                        <label class="form-label" for="title">Booking Titel</label>
+                        <input type="text" id="title" name="title" class="form-input" 
+                               placeholder="F.eks. Filminstruktion for virksomhed X">
+                    </div>
+
+                    <!-- Klient navn og email på samme række -->
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label class="form-label required" for="client_name">Klient Navn</label>
+                            <input type="text" id="client_name" name="client_name" class="form-input" 
+                                   placeholder="Indtast kunde/klient navn" required>
+                        </div>
+                        <div class="form-group required">
+                            <label class="form-label required" for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" 
+                                   placeholder="kontakt@klient.dk" required>
+                        </div>
+                    </div>
+
+                    <!-- Antal deltagere -->
+                    <div class="form-group">
+                        <label class="form-label" for="participant_count">Antal deltagere</label>
+                        <input type="number" id="participant_count" name="participant_count" class="form-input" 
+                               placeholder="Antal personer" min="1">
+                    </div>
+
+                    <!-- Beskrivelse -->
+                    <div class="form-group">
+                        <label class="form-label" for="description">Beskrivelse/Noter</label>
+                        <textarea id="description" name="description" class="form-textarea" rows="3" 
+                                  placeholder="Beskriv booking detaljer..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Dato og tid sektion -->
+                <div class="form-section">
+                    <h3 class="section-title">Dato & Tid</h3>
+                    
+                    <!-- Mail datoer -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="mail_received_date">Dato for modtagelse af mail</label>
+                            <input type="date" id="mail_received_date" name="mail_received_date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="last_mail_sent_date">Dato for sidste mail sendt</label>
+                            <input type="date" id="last_mail_sent_date" name="last_mail_sent_date" class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Dato og tid række -->
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label class="form-label required" for="booking_date">Booking Dato</label>
+                            <input type="date" id="booking_date" name="booking_date" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="start_time">Start Tid</label>
+                            <input type="time" id="start_time" name="start_time" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="end_time">Slut Tid</label>
+                            <input type="time" id="end_time" name="end_time" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film information -->
+                <div class="form-section">
+                    <h3 class="section-title">Film Information</h3>
+                    
+                    <div class="checkbox-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="film_confirmed" name="film_confirmed" value="1">
+                            <label class="checkbox-label" for="film_confirmed">Film - Bekræftet</label>
+                        </div>
+                    </div>
+
+                    <!-- Film titel (vises når film er bekræftet) -->
+                    <div class="form-group" id="filmTitleGroup">
+                        <label class="form-label" for="film_title">Hvilken film</label>
+                        <input type="text" id="film_title" name="film_title" class="form-input" 
+                               placeholder="Indtast filmtitel">
+                    </div>
+                </div>
+
+                <!-- Bekræftelser og arrangementer sektion -->
+                <div class="form-section">
+                    <h3 class="section-title">Bekræftelser & Arrangementer</h3>
+                    
+                    <!-- Bekræftelse checkboxes i rækker -->
+                    <div class="checkbox-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="time_confirmed" name="time_confirmed" value="1">
+                            <label class="checkbox-label" for="time_confirmed">Kl - Bekræftet</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="catering_required" name="catering_required" value="1">
+                            <label class="checkbox-label" for="catering_required">Forplejning</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="own_room" name="own_room" value="1">
+                            <label class="checkbox-label" for="own_room">Egen sal</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="foyer_required" name="foyer_required" value="1">
+                            <label class="checkbox-label" for="foyer_required">Foyer</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tech_required" name="tech_required" value="1">
+                            <label class="checkbox-label" for="tech_required">Teknik</label>
+                        </div>
+                    </div>
+
+                    <!-- Forplejning detaljer (vises når forplejning er valgt) -->
+                    <div class="form-group" id="cateringDetailsGroup">
+                        <label class="form-label" for="catering_details">Forplejning detaljer</label>
+                        <textarea id="catering_details" name="catering_details" class="form-textarea" rows="2" 
+                                  placeholder="Beskriv forplejning behov..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Pris og betaling sektion -->
+                <div class="form-section">
+                    <h3 class="section-title">Pris & Betaling</h3>
+                    
+                    <div class="checkbox-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="price_confirmed" name="price_confirmed" value="1">
+                            <label class="checkbox-label" for="price_confirmed">Pris på film/arrangement</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ticket_price_sent" name="ticket_price_sent" value="1">
+                            <label class="checkbox-label" for="ticket_price_sent">Billetpris - sender vi den</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personale og administration sektion -->
+                <div class="form-section">
+                    <h3 class="section-title">Personale & Administration</h3>
+                    
+                    <div class="checkbox-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="extra_staff" name="extra_staff" value="1">
+                            <label class="checkbox-label" for="extra_staff">Ekstra personale på</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="staff_informed" name="staff_informed" value="1">
+                            <label class="checkbox-label" for="staff_informed">Er personale informeret</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tickets_reserved" name="tickets_reserved" value="1">
+                            <label class="checkbox-label" for="tickets_reserved">Billetter reserveret</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms_written" name="terms_written" value="1">
+                            <label class="checkbox-label" for="terms_written">Er betingelserne skrevet</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="on_special_list" name="on_special_list" value="1">
+                            <label class="checkbox-label" for="on_special_list">På særlisten</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arkiv og faktura sektion jf. ønsket funktionalitet -->
+                <div class="form-section" id="archiveSection" style="display: none;">
+                    <h3 class="section-title">Arkiv & Faktura</h3>
+                    
+                    <div class="checkbox-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="is_archived" name="is_archived" value="1">
+                            <label class="checkbox-label" for="is_archived">Arkiveret</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="invoice_sent" name="invoice_sent" value="1">
+                            <label class="checkbox-label" for="invoice_sent">Faktura sendt</label>
+                        </div>
+                    </div>
+
+                    <!-- Faktura fil sti -->
+                    <div class="form-group">
+                        <label class="form-label" for="invoice_file_path">Faktura fil sti</label>
+                        <input type="text" id="invoice_file_path" name="invoice_file_path" class="form-input" 
+                               placeholder="Sti til faktura fil...">
+                    </div>
+
+                    <!-- Indtægtsanalyse -->
+                    <div class="form-group">
+                        <label class="form-label" for="revenue_analysis">Indtægtsanalyse</label>
+                        <textarea id="revenue_analysis" name="revenue_analysis" class="form-textarea" rows="3" 
+                                  placeholder="Skriv analyse af indtægter og resultater..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Form handlinger -->
+                <div class="form-buttons">
+                    <button type="button" class="form-btn form-btn-secondary" onclick="window.location.href='/'">
+                        Annuller
+                    </button>
+                    <button type="submit" id="submitBtn" class="form-btn form-btn-primary">
+                        Gem Ændringer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- JavaScript organiseret i separate filer -->
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/edit-booking.js"></script>
+</body>
+</html> 

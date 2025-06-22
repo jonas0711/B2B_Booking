@@ -53,6 +53,22 @@ def update_booking_status(booking_id):
     """Opdaterer booking status via controller"""
     return booking_controller.update_booking_status(booking_id)
 
+# Arkiv endpoints jf. ønsket funktionalitet
+@app.route('/api/bookings/active', methods=['GET'])
+def get_active_bookings():
+    """Henter kun aktive (ikke-arkiverede) bookinger"""
+    return booking_controller.get_active_bookings()
+
+@app.route('/api/bookings/archived', methods=['GET'])
+def get_archived_bookings():
+    """Henter arkiverede bookinger med faktura statistik"""
+    return booking_controller.get_archived_bookings()
+
+@app.route('/api/bookings/<int:booking_id>/archive', methods=['PUT'])
+def archive_booking(booking_id):
+    """Arkiverer en specifik booking"""
+    return booking_controller.archive_booking(booking_id)
+
 @app.errorhandler(404)
 def not_found(error):
     """Handler for 404 errors"""
@@ -70,10 +86,13 @@ if __name__ == '__main__':
     print("Backend kører på http://localhost:5000")
     print("Tilgængelige endpoints:")
     print("  GET  /api/bookings - Hent alle bookinger")
+    print("  GET  /api/bookings/active - Hent aktive bookinger")
+    print("  GET  /api/bookings/archived - Hent arkiverede bookinger")
     print("  GET  /api/bookings/<id> - Hent specifik booking")
     print("  POST /api/bookings - Opret ny booking") 
     print("  PUT  /api/bookings/<id> - Opdater booking")
     print("  PUT  /api/bookings/<id>/status - Opdater booking status")
+    print("  PUT  /api/bookings/<id>/archive - Arkiver booking")
     
     # Starter Flask udviklingsserver
     app.run(debug=True, host='0.0.0.0', port=5000) 

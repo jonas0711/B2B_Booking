@@ -23,7 +23,7 @@ async function initializeEditBookingForm() {
         console.error('Ingen booking ID fundet i URL');
         showError('Ingen booking ID specificeret. Redirecter til dashboard.');
         setTimeout(() => {
-            window.location.href = '/html/index.html';
+            window.location.href = '/';
         }, 2000);
         return;
     }
@@ -81,7 +81,7 @@ async function loadBookingData() {
             console.error('Kunne ikke hente booking data:', result.error);
             showError('Kunne ikke hente booking data. Redirecter til dashboard.');
             setTimeout(() => {
-                window.location.href = '/html/index.html';
+                window.location.href = '/';
             }, 2000);
         }
         
@@ -131,6 +131,20 @@ function populateForm(booking) {
     document.getElementById('tickets_reserved').checked = Boolean(booking.tickets_reserved);
     document.getElementById('terms_written').checked = Boolean(booking.terms_written);
     document.getElementById('on_special_list').checked = Boolean(booking.on_special_list);
+    
+    // Arkiv felter jf. ønsket funktionalitet
+    if (booking.is_archived || booking.invoice_sent || booking.invoice_file_path || booking.revenue_analysis) {
+        // Vis arkiv sektion hvis der er arkiv data
+        const archiveSection = document.getElementById('archiveSection');
+        if (archiveSection) {
+            archiveSection.style.display = 'block';
+        }
+        
+        document.getElementById('is_archived').checked = Boolean(booking.is_archived);
+        document.getElementById('invoice_sent').checked = Boolean(booking.invoice_sent);
+        document.getElementById('invoice_file_path').value = booking.invoice_file_path || '';
+        document.getElementById('revenue_analysis').value = booking.revenue_analysis || '';
+    }
     
     // Opdater conditional fields baseret på checkbox states
     updateConditionalFields();
@@ -198,7 +212,7 @@ async function handleFormSubmit(e) {
             
             // Navigerer tilbage til dashboard efter kort delay
             setTimeout(() => {
-                window.location.href = '/html/index.html';
+                window.location.href = '/';
             }, 1500);
         } else {
             console.error('API fejl ved booking opdatering:', result.error);

@@ -47,6 +47,9 @@ function setupEventListeners() {
     // Window event listeners
     setupWindowEventListeners();
     
+    // Arkiv kontroller jf. ønsket funktionalitet
+    initializeArchiveControls();
+    
     debugLog('Event listeners sat op');
 }
 
@@ -71,6 +74,12 @@ async function loadInitialData() {
         
         if (dashboardData) {
             debugLog('Initial data indlæst:', dashboardData.total_count, 'bookinger');
+            
+            // Render bookings hvis der er data - dette var det manglende stykke!
+            if (dashboardData.bookings && dashboardData.bookings.length > 0) {
+                debugLog('Renderer bookings på siden');
+                renderBookings(dashboardData.bookings);
+            }
         }
         
         // Ekstra sikkerhed - force refresh hvis ingen data vises
@@ -169,7 +178,12 @@ async function refreshData() {
         }
         
         // Indlæser frisk data
-        await loadBookingsData();
+        const data = await loadDashboardData();
+        
+        // Render bookings efter data refresh
+        if (data && data.bookings) {
+            renderBookings(data.bookings);
+        }
         
         debugLog('Data refreshet succesfuldt');
         

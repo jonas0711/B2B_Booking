@@ -1,135 +1,205 @@
 /* Dashboard stats styling - forbedret med ny farvepalette */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .stat-card {
-    background: var(--bg-glass-gradient);
-    backdrop-filter: var(--backdrop-blur);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-lg);
-    border: 1px solid var(--border-medium);
-    transition: var(--transition-normal);
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    /* Tilføj subtle gradient overlay */
-    box-shadow: var(--shadow-medium);
 }
 
-/* Hover effekt med gradient glow */
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
 .stat-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: var(--bg-secondary-gradient);
-    opacity: 0;
-    transition: var(--transition-normal);
-    z-index: -1;
+    height: 4px;
+    background: var(--primary-color);
 }
 
-.stat-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--border-accent);
+.stat-card[data-type="pending"]::before {
+    background: var(--warning-color);
 }
 
-.stat-card:hover::before {
-    opacity: 0.1;
+.stat-card[data-type="confirmed"]::before {
+    background: var(--success-color);
+}
+
+.stat-card[data-type="completed"]::before {
+    background: var(--info-color);
+}
+
+.stat-card[data-type="archived"]::before {
+    background: var(--secondary-color);
+}
+
+.stat-card[data-type="invoice"]::before {
+    background: var(--primary-color);
 }
 
 .stat-number {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: #ffffff !important; /* Fallback hvid tekst */
-    margin-bottom: var(--spacing-sm);
-    /* Tilføj gradient text effekt for tal */
-    background: var(--bg-secondary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
     line-height: 1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Browser fallback for gradient text on numbers */
-@supports not (-webkit-background-clip: text) {
-    .stat-number {
-        color: #ffffff !important;
-        background: none !important;
-    }
 }
 
 .stat-label {
-    color: #ffffff !important; /* Hvid tekst for bedre kontrast */
-    font-size: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    opacity: 1;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
 }
 
-/* Tilføj ikoner til hver stat type */
-.stat-card[data-type="total"]::after {
-    content: '📊';
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
+/* Booking sektion */
+.bookings-section {
+    margin-top: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title {
     font-size: 1.5rem;
-    opacity: 0.3;
+    color: var(--text-primary);
+    margin: 0;
 }
 
-.stat-card[data-type="pending"]::after {
-    content: '⏳';
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    font-size: 1.5rem;
-    opacity: 0.3;
+/* Arkiv funktionalitet styling jf. ønsket funktionalitet */
+.section-controls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
-.stat-card[data-type="confirmed"]::after {
-    content: '✅';
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    font-size: 1.5rem;
-    opacity: 0.3;
+.view-toggle {
+    display: flex;
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
 }
 
-.stat-card[data-type="completed"]::after {
-    content: '🎬';
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    font-size: 1.5rem;
-    opacity: 0.3;
+.view-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-/* Responsive design for stats */
+.view-btn:hover {
+    color: var(--text-primary);
+    background: var(--hover-color);
+}
+
+.view-btn.active {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort-controls label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.sort-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--card-background);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Booking grid */
+.bookings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.empty-bookings {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.empty-bookings h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .section-controls {
+        justify-content: space-between;
+    }
+    
+    .view-toggle {
+        flex: 1;
+    }
+    
+    .view-btn {
+        flex: 1;
+        text-align: center;
+    }
+    
     .stats-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-xl);
+        grid-template-columns: repeat(2, 1fr);
     }
     
-    .stat-card {
-        padding: var(--spacing-md);
-    }
-    
-    .stat-number {
-        font-size: 2.2rem;
-    }
-    
-    .stat-label {
-        font-size: 0.9rem;
+    .bookings-grid {
+        grid-template-columns: 1fr;
     }
 }
 

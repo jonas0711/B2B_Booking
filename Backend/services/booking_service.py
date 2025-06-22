@@ -163,4 +163,113 @@ class BookingService:
         except Exception as e:
             error_msg = f"Database fejl: {str(e)}"
             print(f"Database fejl ved opdatering: {error_msg}")
+            return {'success': False, 'error': error_msg}
+
+    # Arkiv funktioner jf. ønsket funktionalitet fra sedel
+    def get_active_bookings_overview(self):
+        """Henter oversigt over kun aktive (ikke-arkiverede) bookinger"""
+        print("Genererer aktive booking oversigt")
+        
+        try:
+            # Kører automatisk arkivering først
+            self.auto_archive_expired()
+            
+            bookings = self.db.get_active_bookings()
+            
+            # Beregner status statistik for aktive bookinger
+            status_counts = {}
+            for booking in bookings:
+                status = booking['status']
+                status_counts[status] = status_counts.get(status, 0) + 1
+            
+            print(f"Aktive booking oversigt genereret - Total: {len(bookings)}")
+            print(f"Status fordeling: {status_counts}")
+            
+            return {
+                'success': True,
+                'bookings': bookings,
+                'total_count': len(bookings),
+                'status_counts': status_counts,
+                'view_type': 'active'
+            }
+        except Exception as e:
+            error_msg = f"Fejl ved hentning af aktive bookinger: {str(e)}"
+            print(f"Database fejl: {error_msg}")
+            return {'success': False, 'error': error_msg}
+    
+    def get_archived_bookings_overview(self):
+        """Henter oversigt over arkiverede bookinger"""
+        print("Genererer arkiveret booking oversigt")
+        
+        try:
+            bookings = self.db.get_archived_bookings()
+            
+            # Beregner statistik for arkiverede bookinger
+            status_counts = {}
+            invoice_stats = {'sent': 0, 'pending': 0}
+            
+            for booking in bookings:
+                status = booking['status']
+                status_counts[status] = status_counts.get(status, 0) + 1
+                
+                # Tæller faktura status
+                if booking.get('invoice_sent', 0):
+                    invoice_stats['sent'] += 1
+                else:
+                    invoice_stats['pending'] += 1
+            
+            print(f"Arkiveret booking oversigt genereret - Total: {len(bookings)}")
+            print(f"Status fordeling: {status_counts}")
+            print(f"Faktura statistik: {invoice_stats}")
+            
+            return {
+                'success': True,
+                'bookings': bookings,
+                'total_count': len(bookings),
+                'status_counts': status_counts,
+                'invoice_stats': invoice_stats,
+                'view_type': 'archived'
+            }
+        except Exception as e:
+            error_msg = f"Fejl ved hentning af arkiverede bookinger: {str(e)}"
+            print(f"Database fejl: {error_msg}")
+            return {'success': False, 'error': error_msg}
+    
+    def archive_booking(self, booking_id):
+        """Arkiverer en specifik booking manuelt"""
+        print(f"Arkiverer booking {booking_id} manuelt")
+        
+        try:
+            success = self.db.archive_booking(booking_id)
+            if success:
+                print(f"Booking {booking_id} arkiveret succesfuldt")
+                return {
+                    'success': True,
+                    'message': 'Booking arkiveret succesfuldt'
+                }
+            else:
+                error_msg = f"Booking med ID {booking_id} ikke fundet"
+                print(f"Arkiveringsfejl: {error_msg}")
+                return {'success': False, 'error': error_msg}
+        except Exception as e:
+            error_msg = f"Database fejl: {str(e)}"
+            print(f"Database fejl ved arkivering: {error_msg}")
+            return {'success': False, 'error': error_msg}
+    
+    def auto_archive_expired(self):
+        """Automatisk arkivering af udløbne arrangementer jf. sedel"""
+        print("Kører automatisk arkivering af udløbne arrangementer")
+        
+        try:
+            archived_count = self.db.auto_archive_expired_bookings()
+            if archived_count > 0:
+                print(f"Automatisk arkiveret {archived_count} udløbne arrangementer")
+            return {
+                'success': True,
+                'archived_count': archived_count,
+                'message': f'Automatisk arkiveret {archived_count} udløbne arrangementer'
+            }
+        except Exception as e:
+            error_msg = f"Fejl ved automatisk arkivering: {str(e)}"
+            print(f"Automatisk arkiveringsfejl: {error_msg}")
             return {'success': False, 'error': error_msg} 

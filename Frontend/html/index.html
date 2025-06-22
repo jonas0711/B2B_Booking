@@ -50,22 +50,37 @@
                 <div class="stat-number" id="completedBookings">0</div>
                 <div class="stat-label">Afsluttet</div>
             </div>
+            <div class="stat-card" data-type="archived" id="archivedCard" style="display: none;">
+                <div class="stat-number" id="archivedBookings">0</div>
+                <div class="stat-label">Arkiveret</div>
+            </div>
+            <div class="stat-card" data-type="invoice" id="invoiceCard" style="display: none;">
+                <div class="stat-number" id="invoicesSent">0</div>
+                <div class="stat-label">Fakturaer Sendt</div>
+            </div>
         </section>
 
         <!-- Booking oversigt sektion -->
         <section class="bookings-section">
             <div class="section-header">
-                <h2 class="section-title">Aktuelle Bookinger</h2>
-                <!-- Sorterings dropdown -->
-                <div class="sort-controls">
-                    <label for="sortSelect">Sorter efter:</label>
-                    <select id="sortSelect" class="sort-select">
-                        <option value="booking_date">Dato</option>
-                        <option value="title">Titel</option>
-                        <option value="client_name">Klient</option>
-                        <option value="status">Status</option>
-                        <option value="created_at">Oprettet</option>
-                    </select>
+                <h2 class="section-title" id="sectionTitle">Aktuelle Bookinger</h2>
+                <div class="section-controls">
+                    <!-- Arkiv skifte knapper jf. ønsket funktionalitet -->
+                    <div class="view-toggle">
+                        <button id="activeViewBtn" class="view-btn active">Aktuelle</button>
+                        <button id="archivedViewBtn" class="view-btn">Arkiv</button>
+                    </div>
+                    <!-- Sorterings dropdown -->
+                    <div class="sort-controls">
+                        <label for="sortSelect">Sorter efter:</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="booking_date">Dato</option>
+                            <option value="title">Titel</option>
+                            <option value="client_name">Klient</option>
+                            <option value="status">Status</option>
+                            <option value="created_at">Oprettet</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
@@ -79,12 +94,12 @@
         </section>
     </main>
 
-    <!-- JavaScript organiseret i separate filer -->
+    <!-- JavaScript organiseret i separate filer - kritisk loading order -->
     <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/dashboard.js"></script>
-    <script src="../js/bookings.js"></script>
     <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/bookings.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script src="../js/main.js"></script>
 </body>
 </html> 

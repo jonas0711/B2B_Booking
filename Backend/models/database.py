@@ -56,9 +56,35 @@ class BookingDatabase:
                 staff_informed BOOLEAN DEFAULT 0,
                 tickets_reserved BOOLEAN DEFAULT 0,
                 terms_written BOOLEAN DEFAULT 0,
-                on_special_list BOOLEAN DEFAULT 0
+                on_special_list BOOLEAN DEFAULT 0,
+                
+                -- Arkiv og faktura felter jf. ønsket funktionalitet
+                is_archived BOOLEAN DEFAULT 0,
+                invoice_sent BOOLEAN DEFAULT 0,
+                invoice_file_path TEXT,
+                revenue_analysis TEXT
             )
         ''')
+        
+        # Tilføj arkiv og faktura kolonner til eksisterende tabeller hvis de ikke findes
+        cursor.execute("PRAGMA table_info(bookings)")
+        columns = [column[1] for column in cursor.fetchall()]
+        
+        if 'is_archived' not in columns:
+            cursor.execute('ALTER TABLE bookings ADD COLUMN is_archived BOOLEAN DEFAULT 0')
+            print("Tilføjet is_archived kolonne")
+            
+        if 'invoice_sent' not in columns:
+            cursor.execute('ALTER TABLE bookings ADD COLUMN invoice_sent BOOLEAN DEFAULT 0')
+            print("Tilføjet invoice_sent kolonne")
+            
+        if 'invoice_file_path' not in columns:
+            cursor.execute('ALTER TABLE bookings ADD COLUMN invoice_file_path TEXT')
+            print("Tilføjet invoice_file_path kolonne")
+            
+        if 'revenue_analysis' not in columns:
+            cursor.execute('ALTER TABLE bookings ADD COLUMN revenue_analysis TEXT')
+            print("Tilføjet revenue_analysis kolonne")
         
         print("Database tabeller oprettet succesfuldt med udvidede felter")
         conn.commit()
@@ -76,9 +102,10 @@ class BookingDatabase:
                 email, mail_received_date, last_mail_sent_date, participant_count, 
                 time_confirmed, film_confirmed, film_title, catering_required, catering_details,
                 own_room, foyer_required, tech_required, price_confirmed, ticket_price_sent,
-                extra_staff, staff_informed, tickets_reserved, terms_written, on_special_list
+                extra_staff, staff_informed, tickets_reserved, terms_written, on_special_list,
+                is_archived, invoice_sent, invoice_file_path, revenue_analysis
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             booking_data.get('title', ''),  # Valgfri
             booking_data.get('description', ''),
@@ -106,7 +133,12 @@ class BookingDatabase:
             booking_data.get('staff_informed', 0),
             booking_data.get('tickets_reserved', 0),
             booking_data.get('terms_written', 0),
-            booking_data.get('on_special_list', 0)
+            booking_data.get('on_special_list', 0),
+            # Nye arkiv og faktura felter
+            booking_data.get('is_archived', 0),
+            booking_data.get('invoice_sent', 0),
+            booking_data.get('invoice_file_path', ''),
+            booking_data.get('revenue_analysis', '')
         ))
         
         booking_id = cursor.lastrowid
@@ -163,7 +195,8 @@ class BookingDatabase:
                 time_confirmed = ?, film_confirmed = ?, film_title = ?, catering_required = ?,
                 catering_details = ?, own_room = ?, foyer_required = ?, tech_required = ?,
                 price_confirmed = ?, ticket_price_sent = ?, extra_staff = ?, staff_informed = ?,
-                tickets_reserved = ?, terms_written = ?, on_special_list = ?
+                tickets_reserved = ?, terms_written = ?, on_special_list = ?,
+                is_archived = ?, invoice_sent = ?, invoice_file_path = ?, revenue_analysis = ?
             WHERE id = ?
         ''', (
             booking_data.get('title', ''),  # Valgfri
@@ -192,6 +225,11 @@ class BookingDatabase:
             booking_data.get('tickets_reserved', 0),
             booking_data.get('terms_written', 0),
             booking_data.get('on_special_list', 0),
+            # Nye arkiv og faktura felter
+            booking_data.get('is_archived', 0),
+            booking_data.get('invoice_sent', 0),
+            booking_data.get('invoice_file_path', ''),
+            booking_data.get('revenue_analysis', ''),
             booking_id
         ))
         
@@ -217,4 +255,76 @@ class BookingDatabase:
         print(f"Opdateret {rows_affected} rækker")
         conn.commit()
         conn.close()
-        return rows_affected > 0 
+        return rows_affected > 0
+
+    # Arkiv funktioner jf. ønsket funktionalitet
+    def get_active_bookings(self):
+        """Henter kun aktive (ikke-arkiverede) bookinger"""
+        print("Henter aktive bookinger (ikke-arkiverede)")
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT * FROM bookings 
+            WHERE is_archived = 0 
+            ORDER BY booking_date DESC, start_time DESC
+        ''')
+        
+        bookings = [dict(row) for row in cursor.fetchall()]
+        print(f"Hentet {len(bookings)} aktive bookinger")
+        conn.close()
+        return bookings
+    
+    def get_archived_bookings(self):
+        """Henter kun arkiverede bookinger"""
+        print("Henter arkiverede bookinger")
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT * FROM bookings 
+            WHERE is_archived = 1 
+            ORDER BY booking_date DESC, start_time DESC
+        ''')
+        
+        bookings = [dict(row) for row in cursor.fetchall()]
+        print(f"Hentet {len(bookings)} arkiverede bookinger")
+        conn.close()
+        return bookings
+    
+    def archive_booking(self, booking_id):
+        """Arkiverer en specifik booking"""
+        print(f"Arkiverer booking {booking_id}")
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE bookings 
+            SET is_archived = 1, updated_at = CURRENT_TIMESTAMP 
+            WHERE id = ?
+        ''', (booking_id,))
+        
+        rows_affected = cursor.rowcount
+        print(f"Arkiveret {rows_affected} booking")
+        conn.commit()
+        conn.close()
+        return rows_affected > 0
+    
+    def auto_archive_expired_bookings(self):
+        """Automatisk arkivering af udløbne bookinger jf. ønsket funktionalitet"""
+        print("Kører automatisk arkivering af udløbne bookinger")
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        # Arkiverer bookinger hvor booking_date er passeret
+        cursor.execute('''
+            UPDATE bookings 
+            SET is_archived = 1, updated_at = CURRENT_TIMESTAMP 
+            WHERE booking_date < DATE('now') AND is_archived = 0
+        ''')
+        
+        rows_affected = cursor.rowcount
+        print(f"Automatisk arkiveret {rows_affected} udløbne bookinger")
+        conn.commit()
+        conn.close()
+        return rows_affected 

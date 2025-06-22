@@ -27,10 +27,13 @@ class BookingController:
             'endpoints': {
                 'GET /': 'Health check',
                 'GET /api/bookings': 'Hent alle bookinger',
+                'GET /api/bookings/active': 'Hent aktive bookinger',
+                'GET /api/bookings/archived': 'Hent arkiverede bookinger',
                 'GET /api/bookings/<id>': 'Hent specifik booking',
                 'POST /api/bookings': 'Opret ny booking',
                 'PUT /api/bookings/<id>': 'Opdater booking',
-                'PUT /api/bookings/<id>/status': 'Opdater booking status'
+                'PUT /api/bookings/<id>/status': 'Opdater booking status',
+                'PUT /api/bookings/<id>/archive': 'Arkiver booking'
             }
         }), 200
     
@@ -214,6 +217,73 @@ class BookingController:
             
         except Exception as e:
             error_msg = f"Controller fejl i update_booking_status: {str(e)}"
+            print(error_msg)
+            return jsonify({'error': error_msg}), 500
+
+    # Arkiv endpoints jf. ønsket funktionalitet fra sedel
+    def get_active_bookings(self):
+        """Henter kun aktive (ikke-arkiverede) bookinger"""
+        print("GET /api/bookings/active - Henter aktive bookinger")
+        
+        try:
+            # Kalder service for aktive booking data
+            result = self.booking_service.get_active_bookings_overview()
+            print(f"Aktive booking oversigt hentet - Success: {result['success']}")
+            
+            if result['success']:
+                return jsonify(result), 200
+            else:
+                print(f"Service fejl: {result['error']}")
+                return jsonify({'error': result['error']}), 500
+                
+        except Exception as e:
+            error_msg = f"Controller fejl i get_active_bookings: {str(e)}"
+            print(error_msg)
+            return jsonify({'error': error_msg}), 500
+    
+    def get_archived_bookings(self):
+        """Henter arkiverede bookinger med faktura statistik"""
+        print("GET /api/bookings/archived - Henter arkiverede bookinger")
+        
+        try:
+            # Kalder service for arkiverede booking data
+            result = self.booking_service.get_archived_bookings_overview()
+            print(f"Arkiverede booking oversigt hentet - Success: {result['success']}")
+            
+            if result['success']:
+                return jsonify(result), 200
+            else:
+                print(f"Service fejl: {result['error']}")
+                return jsonify({'error': result['error']}), 500
+                
+        except Exception as e:
+            error_msg = f"Controller fejl i get_archived_bookings: {str(e)}"
+            print(error_msg)
+            return jsonify({'error': error_msg}), 500
+    
+    def archive_booking(self, booking_id):
+        """Arkiverer en specifik booking manuelt"""
+        print(f"PUT /api/bookings/{booking_id}/archive - Arkiverer booking")
+        
+        try:
+            # Validerer booking ID
+            if not booking_id or not str(booking_id).isdigit():
+                error_msg = "Ugyldigt booking ID"
+                print(f"ID validering fejl: {error_msg}")
+                return jsonify({'error': error_msg}), 400
+            
+            # Kalder service for arkivering
+            result = self.booking_service.archive_booking(int(booking_id))
+            print(f"Booking arkivering resultat - Success: {result['success']}")
+            
+            if result['success']:
+                return jsonify(result), 200
+            else:
+                print(f"Service fejl: {result['error']}")
+                return jsonify({'error': result['error']}), 404
+                
+        except Exception as e:
+            error_msg = f"Controller fejl i archive_booking: {str(e)}"
             print(error_msg)
             return jsonify({'error': error_msg}), 500
 

@@ -4,6 +4,10 @@ console.log('Bookings.js indlæst - Booking funktioner tilgængelige');
 // Globale variabler
 var currentSortField = 'booking_date';
 var currentSortDirection = 'desc';
+var bookingsData = []; // Global booking data cache - defineret her for at undgå duplication
+// Global view state - delt mellem alle JS filer
+window.currentView = window.currentView || 'active';
+var currentView = window.currentView;
 
 // Renderer booking kort i DOM
 function renderBookings(bookings) {
@@ -19,12 +23,12 @@ function renderBookings(bookings) {
     console.log('Container fundet:', container);
     console.log('Container synlig:', container.offsetParent !== null);
     
-    // Tømmer container
+    // Tømmer container - fjerner både placeholder og existing content
     container.innerHTML = '';
 
     if (bookings.length === 0) {
         container.innerHTML = `
-            <div class="loading">
+            <div class="empty-bookings">
                 <h3>Ingen bookinger fundet</h3>
                 <p>Opret din første booking ved at klikke på plus knappen</p>
             </div>
@@ -54,6 +58,7 @@ function renderBookings(bookings) {
     console.log('Booking kort renderet succesfuldt');
     console.log('Container indhold længde:', container.children.length);
     console.log('Container HTML set:', container.innerHTML.length > 0);
+    console.log('Første booking titel:', bookings[0]?.title || 'N/A');
     
     // Force container refresh hvis den ikke er synlig
     if (container.offsetParent === null) {
@@ -93,7 +98,9 @@ function createBookingCard(booking) {
     console.log('Opretter booking kort for:', booking.title);
     
     const card = document.createElement('div');
-    card.className = 'booking-card';
+    // Tilføj status klasse for farvekoordinering af kort
+    const statusClass = booking.is_archived ? 'archived' : booking.status;
+    card.className = `booking-card ${statusClass}`;
     card.dataset.bookingId = booking.id;
 
     const statusConfig = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending;
@@ -120,6 +127,11 @@ function createBookingCard(booking) {
                 <button class="edit-btn" onclick="openEditPage(${booking.id})" title="Rediger booking">
                     ✏️
                 </button>
+                ${!booking.is_archived && window.currentView === 'active' ? `
+                    <button class="archive-btn" onclick="handleArchiveBooking(${booking.id})" title="Arkiver booking">
+                        📁
+                    </button>
+                ` : ''}
             </div>
         </div>
         
@@ -192,6 +204,11 @@ function createBookingCard(booking) {
         ` : ''}
     `;
 
+    // Tilføj arkiv information hvis det er en arkiveret booking
+    if (booking.is_archived && window.currentView === 'archived') {
+        updateArchivedCard(booking);
+    }
+
     return card;
 }
 
@@ -258,16 +275,35 @@ function handleSortChange(event) {
     renderBookings(bookingsData);
 }
 
-// Indlæser alle booking data og opdaterer visning
+// Indlæser alle booking data og opdaterer visning baseret på aktuel view
 async function loadBookingsData() {
-    console.log('Indlæser booking data til visning');
+    console.log(`Indlæser booking data til visning: ${window.currentView}`);
     
-    const result = await fetchBookings();
+    let result;
+    
+    // Brug rigtig API endpoint baseret på view
+    if (window.currentView === 'active') {
+        result = await fetchActiveBookings();
+    } else if (window.currentView === 'archived') {
+        result = await fetchArchivedBookings();
+    } else {
+        // Fallback til alle bookinger
+        result = await fetchBookings();
+    }
     
     if (result.success) {
         bookingsData = result.data.bookings;
         renderBookings(result.data.bookings);
-        updateDashboardStats(result.data);
+        
+        // Opdater korrekte statistikker baseret på view
+        if (window.currentView === 'active') {
+            updateDashboardStats(result.data);
+        } else if (window.currentView === 'archived') {
+            updateArchivedStats(result.data);
+        } else {
+            updateDashboardStats(result.data);
+        }
+        
         return result.data;
     } else {
         console.log('Fejl ved indlæsning af booking data:', result.error);
@@ -301,5 +337,68 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Booking funktionalitet initialiseret');
 });
+
+// Arkiv funktioner jf. ønsket funktionalitet fra sedel
+async function handleArchiveBooking(bookingId) {
+    console.log(`Arkiverer booking ${bookingId}`);
+    
+    // Bekræft arkivering
+    if (!confirm('Er du sikker på at du vil arkivere denne booking? Den flyttes til arkivet.')) {
+        return;
+    }
+    
+    // Send arkivering request
+    const result = await archiveBooking(bookingId);
+    
+    if (result.success) {
+        // Genindlæs data for at opdatere visning
+        await loadDashboardData();
+        showSuccess('Booking arkiveret succesfuldt');
+    }
+}
+
+// Opdaterer booking kort for arkiverede bookinger med faktura info
+function updateArchivedCard(booking) {
+    // Tilføjer faktura information til arkiverede bookinger
+    const card = document.querySelector(`[data-booking-id="${booking.id}"]`);
+    if (!card || !booking.is_archived) return;
+    
+    // Tilføjer arkiv information
+    const detailsSection = card.querySelector('.booking-details');
+    if (detailsSection) {
+        const archiveInfo = document.createElement('div');
+        archiveInfo.className = 'archive-info';
+        archiveInfo.innerHTML = `
+            <div class="detail-row">
+                <div class="detail-item">
+                    <div class="detail-label">Faktura Status</div>
+                    <div class="detail-value">
+                        <span class="confirmation-badge ${booking.invoice_sent ? 'confirmed' : ''}">
+                            ${booking.invoice_sent ? 'Sendt ✓' : 'Ikke sendt'}
+                        </span>
+                    </div>
+                </div>
+                ${booking.invoice_file_path ? `
+                    <div class="detail-item">
+                        <div class="detail-label">Faktura Fil</div>
+                        <div class="detail-value">
+                            <a href="${booking.invoice_file_path}" target="_blank">Se faktura</a>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+            ${booking.revenue_analysis ? `
+                <div class="detail-row">
+                    <div class="detail-item full-width">
+                        <div class="detail-label">Indtægtsanalyse</div>
+                        <div class="detail-value">${escapeHtml(booking.revenue_analysis)}</div>
+                    </div>
+                </div>
+            ` : ''}
+        `;
+        
+        detailsSection.appendChild(archiveInfo);
+    }
+}
 
 console.log('Booking funktioner indlæst og klar'); 

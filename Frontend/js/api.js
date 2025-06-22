@@ -161,4 +161,54 @@ async function checkApiHealth() {
     }
 }
 
+// Arkiv API funktioner jf. ønsket funktionalitet fra sedel
+async function fetchActiveBookings() {
+    console.log('Henter aktive booking data fra backend...');
+    
+    const result = await makeApiRequest('/api/bookings/active');
+    
+    if (result.success) {
+        console.log(`Aktive booking data hentet succesfuldt - ${result.data.total_count} bookinger`);
+        return result;
+    } else {
+        console.error('Fejl ved hentning af aktive bookinger:', result.error);
+        showError(result.data?.error || result.error || 'Kunne ikke hente aktive bookinger');
+        return result;
+    }
+}
+
+async function fetchArchivedBookings() {
+    console.log('Henter arkiverede booking data fra backend...');
+    
+    const result = await makeApiRequest('/api/bookings/archived');
+    
+    if (result.success) {
+        console.log(`Arkiverede booking data hentet succesfuldt - ${result.data.total_count} bookinger`);
+        console.log(`Faktura statistik:`, result.data.invoice_stats);
+        return result;
+    } else {
+        console.error('Fejl ved hentning af arkiverede bookinger:', result.error);
+        showError(result.data?.error || result.error || 'Kunne ikke hente arkiverede bookinger');
+        return result;
+    }
+}
+
+async function archiveBooking(bookingId) {
+    console.log(`Arkiverer booking ${bookingId} via API...`);
+    
+    const result = await makeApiRequest(`/api/bookings/${bookingId}/archive`, {
+        method: 'PUT'
+    });
+    
+    if (result.success) {
+        console.log('Booking arkiveret succesfuldt');
+        showSuccess(result.data.message || 'Booking arkiveret succesfuldt');
+        return result;
+    } else {
+        console.error('Fejl ved arkivering af booking:', result.error);
+        showError(result.data?.error || result.error || 'Kunne ikke arkivere booking');
+        return result;
+    }
+}
+
 console.log('API funktioner defineret og klar til brug'); 
