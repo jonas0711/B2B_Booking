@@ -1,6 +1,29 @@
 // Nordisk Film Booking System - Modal funktioner
 console.log('Modal.js indlæst - Modal funktionalitet tilgængelig');
 
+// Debug: Verificer at modal elementer er tilgængelige
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Modal.js DOM loaded - tjekker modal elementer');
+    const modal = document.getElementById('createModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const bookingForm = document.getElementById('bookingForm');
+    
+    console.log('Modal elementer fundet:', {
+        modal: !!modal,
+        modalTitle: !!modalTitle,
+        submitBtn: !!submitBtn,
+        bookingForm: !!bookingForm
+    });
+    
+    // Verificer at openEditModal funktionen er tilgængelig globalt
+    if (typeof openEditModal === 'function') {
+        console.log('✓ openEditModal funktion er tilgængelig');
+    } else {
+        console.error('✗ openEditModal funktion IKKE tilgængelig');
+    }
+});
+
 // Modal elementer
 const modal = document.getElementById('createModal');
 const modalTitle = document.getElementById('modalTitle');
@@ -226,8 +249,14 @@ async function handleFormSubmit(event) {
 document.addEventListener('DOMContentLoaded', function() {
     // Modal luk knapper
     const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    
     if (closeBtn) {
         closeBtn.addEventListener('click', closeCreateModal);
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeCreateModal);
     }
     
     // Klik uden for modal lukker den

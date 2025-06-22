@@ -37,6 +37,24 @@ app.get('/create-booking', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'create-booking.html'));
 });
 
+// Rute til create-booking med html prefix
+app.get('/html/create-booking.html', (req, res) => {
+    console.log('Create-booking HTML rute - sender create-booking.html');
+    res.sendFile(path.join(__dirname, 'html', 'create-booking.html'));
+});
+
+// Rute til edit-booking siden 
+app.get('/html/edit-booking.html', (req, res) => {
+    console.log('Edit-booking rute - sender edit-booking.html');
+    res.sendFile(path.join(__dirname, 'html', 'edit-booking.html'));
+});
+
+// Alternativ rute til edit-booking uden html prefix
+app.get('/edit-booking', (req, res) => {
+    console.log('Edit-booking alternativ rute - sender edit-booking.html');
+    res.sendFile(path.join(__dirname, 'html', 'edit-booking.html'));
+});
+
 // Sundhedscheck endpoint
 app.get('/health', (req, res) => {
     console.log('Health check endpoint kaldt');
@@ -78,7 +96,7 @@ app.use((req, res) => {
     res.status(404).json({
         error: 'Side ikke fundet',
         requested_url: req.url,
-        available_routes: ['/', '/dashboard', '/create-booking', '/health', '/api/status']
+        available_routes: ['/', '/dashboard', '/create-booking', '/edit-booking', '/html/create-booking.html', '/html/edit-booking.html', '/health', '/api/status']
     });
 });
 

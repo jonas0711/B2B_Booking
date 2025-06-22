@@ -55,12 +55,32 @@ async function loadInitialData() {
     debugLog('Indlæser initial applikation data');
     
     try {
+        // Venter lidt ekstra for at sikre DOM er helt klar
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Tjekker at booking container eksisterer før loading
+        const container = document.getElementById('bookingsContainer');
+        if (!container) {
+            console.error('Booking container ikke fundet ved initial load');
+            // Forsøger igen efter kort delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
         // Indlæser dashboard og booking data
         const dashboardData = await loadDashboardData();
         
         if (dashboardData) {
             debugLog('Initial data indlæst:', dashboardData.total_count, 'bookinger');
         }
+        
+        // Ekstra sikkerhed - force refresh hvis ingen data vises
+        setTimeout(() => {
+            const container = document.getElementById('bookingsContainer');
+            if (container && container.children.length === 0) {
+                console.warn('Ingen booking kort synlige efter initial load - forsøger genindlæsning');
+                loadDashboardData();
+            }
+        }, 1000);
         
     } catch (error) {
         console.error('Fejl ved indlæsning af initial data:', error);
@@ -93,13 +113,39 @@ function setupKeyboardShortcuts() {
 function setupWindowEventListeners() {
     debugLog('Sætter window event listeners');
     
-    // Visibility change - refresh data når tab bliver synlig igen
+    // Variable til at undgå multiple refresh calls
+    let refreshTimeout = null;
+    let isInitialLoad = true;
+    
+    // Visibility change - refresh data når tab bliver synlig igen (men ikke ved initial load)
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
+            // Skip refresh ved initial load for at undgå race condition
+            if (isInitialLoad) {
+                debugLog('Tab blev synlig - springer refresh over (initial load)');
+                isInitialLoad = false;
+                return;
+            }
+            
             debugLog('Tab blev synlig - refresher data');
-            refreshData();
+            
+            // Debounce refresh for at undgå multiple calls
+            if (refreshTimeout) {
+                clearTimeout(refreshTimeout);
+            }
+            
+            refreshTimeout = setTimeout(() => {
+                refreshData();
+                refreshTimeout = null;
+            }, 500); // 500ms delay
         }
     });
+    
+    // Reset initial load flag efter 5 sekunder
+    setTimeout(() => {
+        isInitialLoad = false;
+        debugLog('Initial load periode afsluttet - visibility refresh aktiveret');
+    }, 5000);
     
     // Før side forlades
     window.addEventListener('beforeunload', function(e) {

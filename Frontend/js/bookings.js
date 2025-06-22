@@ -11,10 +11,14 @@ function renderBookings(bookings) {
     
     const container = document.getElementById('bookingsContainer');
     if (!container) {
-        console.error('Booking container ikke fundet');
+        console.error('Booking container ikke fundet - DOM muligvis ikke klar');
         return;
     }
 
+    // Debug container state
+    console.log('Container fundet:', container);
+    console.log('Container synlig:', container.offsetParent !== null);
+    
     // Tømmer container
     container.innerHTML = '';
 
@@ -25,19 +29,40 @@ function renderBookings(bookings) {
                 <p>Opret din første booking ved at klikke på plus knappen</p>
             </div>
         `;
+        console.log('Viser "ingen bookinger" besked');
         return;
     }
 
     // Sorter bookings baseret på nuværende sort indstillinger
     const sortedBookings = sortBookings(bookings, currentSortField, currentSortDirection);
 
-    // Opretter booking kort for hver booking
-    sortedBookings.forEach(booking => {
+    // Opretter booking kort for hver booking med animationsdelay
+    sortedBookings.forEach((booking, index) => {
         const bookingCard = createBookingCard(booking);
+        
+        // Tilføjer animation delay for smooth loading
+        bookingCard.style.animationDelay = `${index * 100}ms`;
+        bookingCard.classList.add('fade-in');
+        
         container.appendChild(bookingCard);
+        
+        // Force reflow for at sikre synlighed
+        bookingCard.offsetHeight;
     });
 
+    // Debug final state
     console.log('Booking kort renderet succesfuldt');
+    console.log('Container indhold længde:', container.children.length);
+    console.log('Container HTML set:', container.innerHTML.length > 0);
+    
+    // Force container refresh hvis den ikke er synlig
+    if (container.offsetParent === null) {
+        console.warn('Container ikke synlig efter rendering - forsøger fix');
+        setTimeout(() => {
+            container.style.display = 'block';
+            container.style.visibility = 'visible';
+        }, 100);
+    }
 }
 
 // Sorterer bookings baseret på felt og retning
@@ -92,7 +117,7 @@ function createBookingCard(booking) {
                 <span class="status-badge ${statusConfig.class}" onclick="changeBookingStatus(${booking.id}, '${booking.status}')">
                     ${statusConfig.label}
                 </span>
-                <button class="edit-btn" onclick="openEditModal(${booking.id})" title="Rediger booking">
+                <button class="edit-btn" onclick="openEditPage(${booking.id})" title="Rediger booking">
                     ✏️
                 </button>
             </div>
@@ -248,6 +273,14 @@ async function loadBookingsData() {
         console.log('Fejl ved indlæsning af booking data:', result.error);
         return null;
     }
+}
+
+// Åbner edit side for en specifik booking
+function openEditPage(bookingId) {
+    console.log(`Navigerer til edit side for booking ${bookingId}`);
+    
+    // Navigerer til edit-booking siden med booking ID som parameter
+    window.location.href = `/html/edit-booking.html?id=${bookingId}`;
 }
 
 // Initialiserer booking funktionalitet
