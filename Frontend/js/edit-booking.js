@@ -60,9 +60,9 @@ async function loadBookingData() {
         // Henter booking data fra API
         const result = await fetchBookingById(currentBookingId);
         
-        if (result.success && result.data) {
-            // Backend returnerer booking data direkte i result.data, ikke result.data.booking
-            originalBookingData = result.data;
+        if (result.success && result.data && result.data.data) {
+            // Backend returnerer booking data som result.data.data (data felt indeholder selve booking-objektet)
+            originalBookingData = result.data.data;
             console.log('Booking data hentet:', originalBookingData);
             
             // Udfylder formularen med data
@@ -71,7 +71,7 @@ async function loadBookingData() {
             // Opdaterer side titel
             const pageTitle = document.getElementById('pageTitle');
             if (pageTitle) {
-                pageTitle.textContent = `Rediger Booking: ${originalBookingData.title || originalBookingData.client_name}`;
+                pageTitle.textContent = `Rediger Booking: ${originalBookingData.title || originalBookingData.client_name || originalBookingData.film_title || 'Uden titel'}`;
             }
             
             // Skjuler loading og viser form
