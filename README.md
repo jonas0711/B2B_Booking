@@ -17,6 +17,48 @@ Systemet består af to dele, der skal køre samtidigt i to separate terminalvind
 
 ---
 
+### Daglig Opstart (Når installationen er fuldført)
+
+Denne sektion er til dig, der allerede har installeret programmet og bare skal starte det til daglig brug.
+
+**Trin 1: Start Backend (Programmets "hjerne")**
+1.  Åbn Terminal (find den via Spotlight 🔍).
+2.  Skriv følgende kommando for at gå til den rigtige mappe og tryk Enter:
+    ```bash
+    cd Desktop/B2B/Backend
+    ```
+3.  Skriv følgende kommando for at starte serveren og tryk Enter:
+    ```bash
+    python3 app.py
+    ```
+4.  Lad dette terminalvindue være åbent.
+
+**Trin 2: Start Frontend (Hjemmesiden)**
+1.  Åbn et **nyt** Terminal-vindue (i menubaren: `Shell` -> `Nyt vindue`).
+2.  Skriv følgende kommando for at gå til den rigtige mappe og tryk Enter:
+    ```bash
+    cd Desktop/B2B/Frontend
+    ```
+3.  Skriv følgende kommando for at starte serveren og tryk Enter:
+    ```bash
+    node server.js
+    ```
+4.  Lad også dette terminalvindue være åbent.
+
+**Trin 3: Åbn Programmet i din Browser**
+1.  Åbn din browser (f.eks. Safari).
+2.  Gå til adressen: `http://localhost:3000`
+
+Du er nu klar til at bruge programmet!
+
+---
+
+### Første Gangs Installation (Udføres kun én gang)
+
+Herunder følger den oprindelige guide til at installere alt fra bunden. Disse trin skal kun følges første gang.
+
+---
+
 ### Del 1: Forberedelse – Installation af Værktøjer
 
 Før du kan køre programmet, skal du installere nogle grundlæggende udviklingsværktøjer. Det gøres nemmest via **Terminalen**.
