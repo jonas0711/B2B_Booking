@@ -25,7 +25,7 @@ Denne sektion er til dig, der allerede har installeret programmet og bare skal s
 1.  Åbn Terminal (find den via Spotlight 🔍).
 2.  Skriv følgende kommando for at gå til den rigtige mappe og tryk Enter:
     ```bash
-    cd Desktop/B2B/Backend
+    cd Desktop/B2B_Booking/Backend
     ```
 3.  Skriv følgende kommando for at starte serveren og tryk Enter:
     ```bash
@@ -37,7 +37,7 @@ Denne sektion er til dig, der allerede har installeret programmet og bare skal s
 1.  Åbn et **nyt** Terminal-vindue (i menubaren: `Shell` -> `Nyt vindue`).
 2.  Skriv følgende kommando for at gå til den rigtige mappe og tryk Enter:
     ```bash
-    cd Desktop/B2B/Frontend
+    cd Desktop/B2B_Booking/Frontend
     ```
 3.  Skriv følgende kommando for at starte serveren og tryk Enter:
     ```bash
@@ -112,12 +112,12 @@ Denne kommando downloader en kopi af projektet til din computer.
     git clone https://github.com/jonas0711/B2B_Booking.git
     ```
 
-2.  Når den er færdig, vil der ligge en ny mappe ved navn `B2B` på dit skrivebord.
+2.  Når den er færdig, vil der ligge en ny mappe ved navn `B2B_Booking` på dit skrivebord.
 
 **Trin 3: Gå ind i Projektmappen**
 1.  Skriv følgende i Terminalen for at gå ind i den nye mappe:
     ```bash
-    cd B2B
+    cd B2B_Booking
     ```
     Du er nu klar til at starte programmerne.
 
@@ -127,7 +127,7 @@ Denne kommando downloader en kopi af projektet til din computer.
 
 Backend'en er programmets "hjerne". Den skal startes først.
 
-1.  **Gå til Backend-mappen**. Du står allerede i `B2B`-mappen. Skriv nu:
+1.  **Gå til Backend-mappen**. Du står allerede i `B2B_Booking`-mappen. Skriv nu:
     ```bash
     cd Backend
     ```
@@ -154,7 +154,7 @@ Frontend'en er den hjemmeside, du interagerer med. Den skal køre i sit eget, se
 
 2.  **Gå til projektmappen i det nye vindue**. Ligesom før skal vi navigere til den korrekte mappe.
     ```bash
-    cd Desktop/B2B/Frontend
+    cd Desktop/B2B_Booking/Frontend
     ```
 3.  **Installer Node-pakker**.
     ```bash
