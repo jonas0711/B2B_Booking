@@ -106,15 +106,13 @@ Vi henter koden til dit skrivebord for nemheds skyld.
 
 **Trin 2: Klon Projektet fra GitHub**
 Denne kommando downloader en kopi af projektet til din computer.
-1.  Erstat `[INDSÆT_GITHUB_LINK_HER]` i kommandoen nedenfor med det link, du har modtaget til GitHub-projektet.
-2.  Kør kommandoen i Terminalen:
+1.  Kør kommandoen i Terminalen:
 
     ```bash
-    git clone [INDSÆT_GITHUB_LINK_HER] B2B
+    git clone https://github.com/jonas0711/B2B_Booking.git
     ```
-    *Eksempel:* `git clone https://github.com/NordiskFilm/B2B-Booking.git B2B`
 
-3.  Når den er færdig, vil der ligge en ny mappe ved navn `B2B` på dit skrivebord.
+2.  Når den er færdig, vil der ligge en ny mappe ved navn `B2B` på dit skrivebord.
 
 **Trin 3: Gå ind i Projektmappen**
 1.  Skriv følgende i Terminalen for at gå ind i den nye mappe:
