@@ -34,15 +34,20 @@ function setupFormEventListeners() {
         console.log('Form submit listener tilføjet');
     }
     
-    // Conditional field listeners
-    const filmConfirmedCheckbox = document.getElementById('film_confirmed');
-    if (filmConfirmedCheckbox) {
-        filmConfirmedCheckbox.addEventListener('change', handleFilmConfirmedChange);
+    // Conditional field listeners for new structure
+    const filmRequiredSelect = document.getElementById('film_required');
+    if (filmRequiredSelect) {
+        filmRequiredSelect.addEventListener('change', handleFilmRequiredChange);
     }
     
-    const cateringRequiredCheckbox = document.getElementById('catering_required');
-    if (cateringRequiredCheckbox) {
-        cateringRequiredCheckbox.addEventListener('change', handleCateringRequiredChange);
+    const cateringRequiredSelect = document.getElementById('catering_required');
+    if (cateringRequiredSelect) {
+        cateringRequiredSelect.addEventListener('change', handleCateringRequiredChange);
+    }
+    
+    const techRequiredSelect = document.getElementById('tech_required');
+    if (techRequiredSelect) {
+        techRequiredSelect.addEventListener('change', handleTechRequiredChange);
     }
     
     console.log('Conditional field listeners tilføjet');
@@ -119,6 +124,10 @@ function collectFormData() {
             bookingData[key] = null;
         } else if (key === 'participant_count' && value) {
             bookingData[key] = parseInt(value);
+        } else if (key === 'arrangement_price' && value) {
+            bookingData[key] = parseFloat(value);
+        } else if (key === 'film_required' || key === 'catering_required' || key === 'tech_required') {
+            bookingData[key] = parseInt(value);
         } else {
             bookingData[key] = value;
         }
@@ -173,59 +182,67 @@ function validateBookingData(data) {
 function setupConditionalFields() {
     console.log('Sætter conditional fields');
     
-    // Skjul film title og catering details initially
+    // Skjul film title, catering details og tech details initially
     const filmTitleGroup = document.getElementById('filmTitleGroup');
     const cateringDetailsGroup = document.getElementById('cateringDetailsGroup');
+    const techDetailsGroup = document.getElementById('techDetailsGroup');
     
     if (filmTitleGroup) {
-        filmTitleGroup.classList.add('hidden');
+        filmTitleGroup.style.display = 'none';
     }
     
     if (cateringDetailsGroup) {
-        cateringDetailsGroup.classList.add('hidden');
+        cateringDetailsGroup.style.display = 'none';
+    }
+    
+    if (techDetailsGroup) {
+        techDetailsGroup.style.display = 'none';
     }
     
     console.log('Conditional fields sat op');
 }
 
-// Håndterer film confirmed change
-function handleFilmConfirmedChange(e) {
-    console.log('Film confirmed changed:', e.target.checked);
+// Håndterer film required change
+function handleFilmRequiredChange(e) {
+    console.log('Film required changed:', e.target.value);
     
     const filmTitleGroup = document.getElementById('filmTitleGroup');
     if (filmTitleGroup) {
-        if (e.target.checked) {
-            filmTitleGroup.classList.remove('hidden');
-            filmTitleGroup.classList.add('show');
+        if (e.target.value === '1') {
+            filmTitleGroup.style.display = 'block';
         } else {
-            filmTitleGroup.classList.add('hidden');
-            filmTitleGroup.classList.remove('show');
-            // Clear field value
-            const filmTitleInput = document.getElementById('film_title');
-            if (filmTitleInput) {
-                filmTitleInput.value = '';
-            }
+            filmTitleGroup.style.display = 'none';
+            document.getElementById('film_title').value = '';
         }
     }
 }
 
+// Håndterer tech required change
+function handleTechRequiredChange(e) {
+    console.log('Tech required changed:', e.target.value);
+    
+    const techDetailsGroup = document.getElementById('techDetailsGroup');
+    if (techDetailsGroup) {
+        if (e.target.value === '1') {
+            techDetailsGroup.style.display = 'block';
+        } else {
+            techDetailsGroup.style.display = 'none';
+            document.getElementById('tech_details').value = '';
+                 }
+     }
+ }
+
 // Håndterer catering required change
 function handleCateringRequiredChange(e) {
-    console.log('Catering required changed:', e.target.checked);
+    console.log('Catering required changed:', e.target.value);
     
     const cateringDetailsGroup = document.getElementById('cateringDetailsGroup');
     if (cateringDetailsGroup) {
-        if (e.target.checked) {
-            cateringDetailsGroup.classList.remove('hidden');
-            cateringDetailsGroup.classList.add('show');
+        if (e.target.value === '1') {
+            cateringDetailsGroup.style.display = 'block';
         } else {
-            cateringDetailsGroup.classList.add('hidden');
-            cateringDetailsGroup.classList.remove('show');
-            // Clear field value
-            const cateringDetailsInput = document.getElementById('catering_details');
-            if (cateringDetailsInput) {
-                cateringDetailsInput.value = '';
-            }
+            cateringDetailsGroup.style.display = 'none';
+            document.getElementById('catering_details').value = '';
         }
     }
 }

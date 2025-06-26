@@ -60,8 +60,9 @@ async function loadBookingData() {
         // Henter booking data fra API
         const result = await fetchBookingById(currentBookingId);
         
-        if (result.success && result.data && result.data.booking) {
-            originalBookingData = result.data.booking;
+        if (result.success && result.data) {
+            // Backend returnerer booking data direkte i result.data, ikke result.data.booking
+            originalBookingData = result.data;
             console.log('Booking data hentet:', originalBookingData);
             
             // Udfylder formularen med data
@@ -96,41 +97,68 @@ async function loadBookingData() {
 function populateForm(booking) {
     console.log('Udfylder formular med booking data:', booking.title || booking.client_name);
     
+    // Hjælpe funktion til sikker element opdatering
+    const setValueSafely = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.value = value || '';
+        } else {
+            console.warn(`Input element ikke fundet: ${id}`);
+        }
+    };
+    
     // Grundlæggende felter
-    document.getElementById('bookingId').value = booking.id || '';
-    document.getElementById('title').value = booking.title || '';
-    document.getElementById('client_name').value = booking.client_name || '';
-    document.getElementById('email').value = booking.email || '';
-    document.getElementById('booking_date').value = booking.booking_date || '';
-    document.getElementById('start_time').value = booking.start_time || '';
-    document.getElementById('end_time').value = booking.end_time || '';
-    document.getElementById('description').value = booking.description || '';
+    setValueSafely('bookingId', booking.id);
+    setValueSafely('title', booking.title);
+    setValueSafely('client_name', booking.client_name);
+    setValueSafely('email', booking.email);
+    setValueSafely('cinema_location', booking.cinema_location || 'Kennedy');
+    setValueSafely('status', booking.status || 'pending');
+    setValueSafely('booking_date', booking.booking_date);
+    setValueSafely('start_time', booking.start_time);
+    setValueSafely('end_time', booking.end_time);
+    setValueSafely('description', booking.description);
     
     // Dato felter
-    document.getElementById('mail_received_date').value = booking.mail_received_date || '';
-    document.getElementById('last_mail_sent_date').value = booking.last_mail_sent_date || '';
+    setValueSafely('mail_received_date', booking.mail_received_date);
+    setValueSafely('last_mail_sent_date', booking.last_mail_sent_date);
     
     // Numeriske felter
-    document.getElementById('participant_count').value = booking.participant_count || '';
+    setValueSafely('participant_count', booking.participant_count);
     
     // Tekst felter
-    document.getElementById('film_title').value = booking.film_title || '';
-    document.getElementById('catering_details').value = booking.catering_details || '';
+    setValueSafely('film_title', booking.film_title);
+    setValueSafely('catering_details', booking.catering_details);
+    setValueSafely('tech_details', booking.tech_details);
     
-    // Checkbox felter - konverterer 1/0 til boolean
-    document.getElementById('time_confirmed').checked = Boolean(booking.time_confirmed);
-    document.getElementById('film_confirmed').checked = Boolean(booking.film_confirmed);
-    document.getElementById('catering_required').checked = Boolean(booking.catering_required);
-    document.getElementById('own_room').checked = Boolean(booking.own_room);
-    document.getElementById('foyer_required').checked = Boolean(booking.foyer_required);
-    document.getElementById('tech_required').checked = Boolean(booking.tech_required);
-    document.getElementById('price_confirmed').checked = Boolean(booking.price_confirmed);
-    document.getElementById('ticket_price_sent').checked = Boolean(booking.ticket_price_sent);
-    document.getElementById('extra_staff').checked = Boolean(booking.extra_staff);
-    document.getElementById('staff_informed').checked = Boolean(booking.staff_informed);
-    document.getElementById('tickets_reserved').checked = Boolean(booking.tickets_reserved);
-    document.getElementById('terms_written').checked = Boolean(booking.terms_written);
-    document.getElementById('on_special_list').checked = Boolean(booking.on_special_list);
+    // Ny struktur for film, forplejning og teknik - matcher backend field navne
+    setValueSafely('film_required', booking.film_confirmed ? '1' : (booking.film_title ? '1' : '0'));
+    setValueSafely('catering_required', booking.catering_required ? '1' : (booking.catering_details ? '1' : '0'));
+    setValueSafely('tech_required', booking.tech_required ? '1' : (booking.tech_details ? '1' : '0'));
+    
+    // Pris som input felt
+    setValueSafely('arrangement_price', booking.arrangement_price);
+    
+    // Checkbox felter - konverterer 1/0 til boolean med error handling
+    const setCheckboxSafely = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.checked = Boolean(value);
+        } else {
+            console.warn(`Checkbox element ikke fundet: ${id}`);
+        }
+    };
+    
+    setCheckboxSafely('time_confirmed', booking.time_confirmed);
+    setCheckboxSafely('price_confirmed', booking.price_confirmed);
+    setCheckboxSafely('own_room', booking.own_room);
+    setCheckboxSafely('foyer_required', booking.foyer_required);
+    setCheckboxSafely('ticket_price_sent', booking.ticket_price_sent);
+    setCheckboxSafely('extra_staff', booking.extra_staff);
+    setCheckboxSafely('staff_informed', booking.staff_informed);
+    setCheckboxSafely('tickets_reserved', booking.tickets_reserved);
+    setCheckboxSafely('terms_written', booking.terms_written);
+    setCheckboxSafely('on_special_list', booking.on_special_list);
     
     // Arkiv felter jf. ønsket funktionalitet
     if (booking.is_archived || booking.invoice_sent || booking.invoice_file_path || booking.revenue_analysis) {
@@ -163,15 +191,20 @@ function setupFormEventListeners() {
         console.log('Form submit listener tilføjet');
     }
     
-    // Conditional field listeners
-    const filmConfirmedCheckbox = document.getElementById('film_confirmed');
-    if (filmConfirmedCheckbox) {
-        filmConfirmedCheckbox.addEventListener('change', handleFilmConfirmedChange);
+    // Conditional field listeners for new structure
+    const filmRequiredSelect = document.getElementById('film_required');
+    if (filmRequiredSelect) {
+        filmRequiredSelect.addEventListener('change', handleFilmRequiredChange);
     }
     
-    const cateringRequiredCheckbox = document.getElementById('catering_required');
-    if (cateringRequiredCheckbox) {
-        cateringRequiredCheckbox.addEventListener('change', handleCateringRequiredChange);
+    const cateringRequiredSelect = document.getElementById('catering_required');
+    if (cateringRequiredSelect) {
+        cateringRequiredSelect.addEventListener('change', handleCateringRequiredChange);
+    }
+    
+    const techRequiredSelect = document.getElementById('tech_required');
+    if (techRequiredSelect) {
+        techRequiredSelect.addEventListener('change', handleTechRequiredChange);
     }
     
     console.log('Conditional field listeners tilføjet');
@@ -244,6 +277,13 @@ function collectFormData() {
     for (let [key, value] of formData.entries()) {
         if (key === 'bookingId') continue; // Springer booking ID over
         
+        // rolle: Mapper frontend select navne til korrekte database felter
+        // begrundelse: Frontend bruger _required navne men database bruger _confirmed og _required
+        if (key === 'film_required') {
+            bookingData['film_confirmed'] = value === '1' ? 1 : 0;
+            continue;
+        }
+        
         if (value === 'on' || value === '1') {
             bookingData[key] = 1;
         } else if (value === '' || value === null || value === undefined) {
@@ -309,43 +349,89 @@ function setupConditionalFields() {
     console.log('Conditional fields sat op');
 }
 
-// Opdaterer conditional fields baseret på checkbox states
+// Opdaterer conditional fields baseret på select states
 function updateConditionalFields() {
-    const filmConfirmed = document.getElementById('film_confirmed').checked;
-    const cateringRequired = document.getElementById('catering_required').checked;
+    console.log('Opdaterer conditional fields');
     
+    // Film titel felt
+    const filmRequired = document.getElementById('film_required').value;
     const filmTitleGroup = document.getElementById('filmTitleGroup');
+    if (filmTitleGroup) {
+        if (filmRequired === '1') {
+            filmTitleGroup.style.display = 'block';
+        } else {
+            filmTitleGroup.style.display = 'none';
+        }
+    }
+    
+    // Forplejning detaljer felt
+    const cateringRequired = document.getElementById('catering_required').value;
     const cateringDetailsGroup = document.getElementById('cateringDetailsGroup');
-    
-    // Viser/skjuler film titel felt
-    if (filmConfirmed) {
-        filmTitleGroup.classList.remove('hidden');
-        filmTitleGroup.classList.add('show');
-    } else {
-        filmTitleGroup.classList.add('hidden');
-        filmTitleGroup.classList.remove('show');
+    if (cateringDetailsGroup) {
+        if (cateringRequired === '1') {
+            cateringDetailsGroup.style.display = 'block';
+        } else {
+            cateringDetailsGroup.style.display = 'none';
+        }
     }
     
-    // Viser/skjuler forplejning detaljer felt
-    if (cateringRequired) {
-        cateringDetailsGroup.classList.remove('hidden');
-        cateringDetailsGroup.classList.add('show');
-    } else {
-        cateringDetailsGroup.classList.add('hidden');
-        cateringDetailsGroup.classList.remove('show');
+    // Teknik detaljer felt
+    const techRequired = document.getElementById('tech_required').value;
+    const techDetailsGroup = document.getElementById('techDetailsGroup');
+    if (techDetailsGroup) {
+        if (techRequired === '1') {
+            techDetailsGroup.style.display = 'block';
+        } else {
+            techDetailsGroup.style.display = 'none';
+        }
     }
+    
+    console.log('Conditional fields opdateret');
 }
 
-// Håndterer film confirmed change
-function handleFilmConfirmedChange(e) {
-    console.log('Film confirmed changed:', e.target.checked);
-    updateConditionalFields();
+// Håndterer film required change
+function handleFilmRequiredChange(e) {
+    console.log('Film required changed:', e.target.value);
+    
+    const filmTitleGroup = document.getElementById('filmTitleGroup');
+    if (filmTitleGroup) {
+        if (e.target.value === '1') {
+            filmTitleGroup.style.display = 'block';
+        } else {
+            filmTitleGroup.style.display = 'none';
+            document.getElementById('film_title').value = '';
+        }
+    }
 }
 
 // Håndterer catering required change
 function handleCateringRequiredChange(e) {
-    console.log('Catering required changed:', e.target.checked);
-    updateConditionalFields();
+    console.log('Catering required changed:', e.target.value);
+    
+    const cateringDetailsGroup = document.getElementById('cateringDetailsGroup');
+    if (cateringDetailsGroup) {
+        if (e.target.value === '1') {
+            cateringDetailsGroup.style.display = 'block';
+        } else {
+            cateringDetailsGroup.style.display = 'none';
+            document.getElementById('catering_details').value = '';
+        }
+    }
+}
+
+// Håndterer tech required change
+function handleTechRequiredChange(e) {
+    console.log('Tech required changed:', e.target.value);
+    
+    const techDetailsGroup = document.getElementById('techDetailsGroup');
+    if (techDetailsGroup) {
+        if (e.target.value === '1') {
+            techDetailsGroup.style.display = 'block';
+        } else {
+            techDetailsGroup.style.display = 'none';
+            document.getElementById('tech_details').value = '';
+        }
+    }
 }
 
 // Sætter form validation

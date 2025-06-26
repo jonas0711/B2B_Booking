@@ -63,7 +63,9 @@ async function fetchBookingById(bookingId) {
     const result = await makeApiRequest(`/api/bookings/${bookingId}`);
     
     if (result.success) {
-        console.log('Booking hentet succesfuldt:', result.data.booking.title);
+        // Backend returnerer booking data direkte i result.data, ikke result.data.booking
+        const bookingTitle = result.data?.title || result.data?.client_name || 'Uden titel';
+        console.log('Booking hentet succesfuldt:', bookingTitle);
         return result;
     } else {
         console.error('Fejl ved hentning af booking:', result.error);

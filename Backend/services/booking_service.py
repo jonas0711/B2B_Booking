@@ -51,19 +51,19 @@ class BookingService:
         try:
             booking = self.db.get_booking_by_id(booking_id)
             if booking:
-                print(f"Booking fundet: {booking['title']}")
+                print(f"Booking fundet: {booking.get('title', 'Uden titel')}")
                 return {
                     'success': True,
-                    'booking': booking
+                    'data': booking
                 }
             else:
                 error_msg = f"Booking med ID {booking_id} ikke fundet"
                 print(f"Booking ikke fundet: {error_msg}")
-                return {'success': False, 'error': error_msg}
+                return {'success': False, 'error': error_msg, 'data': None}
         except Exception as e:
             error_msg = f"Database fejl: {str(e)}"
             print(f"Database fejl ved hentning: {error_msg}")
-            return {'success': False, 'error': error_msg}
+            return {'success': False, 'error': error_msg, 'data': None}
     
     def update_booking(self, booking_id, booking_data):
         """Opdaterer en eksisterende booking med alle data"""
@@ -76,9 +76,12 @@ class BookingService:
             print(f"Opdateringsfejl: {error_msg}")
             return {'success': False, 'error': error_msg}
         
+        # Slår ny data sammen med eksisterende, så vi kan validere fulde data inkl. felter der ikke blev sendt
+        merged_data = { **existing_booking, **booking_data }  # booking_data har forrang
+
         # Validerer påkrævede felter - kun navn, email og dato er påkrævet ved opdatering
         required_fields = ['client_name', 'email', 'booking_date']  
-        missing_fields = [field for field in required_fields if not booking_data.get(field)]
+        missing_fields = [field for field in required_fields if not merged_data.get(field)]
         
         if missing_fields:
             error_msg = f"Påkrævede felter mangler: {', '.join(missing_fields)}"
@@ -87,14 +90,14 @@ class BookingService:
         
         # Validerer dato format
         try:
-            datetime.strptime(booking_data['booking_date'], '%Y-%m-%d')
+            datetime.strptime(merged_data['booking_date'], '%Y-%m-%d')
         except ValueError:
             error_msg = "Ugyldig dato format. Brug YYYY-MM-DD"
             print(f"Dato validationsfejl: {error_msg}")
             return {'success': False, 'error': error_msg}
         
         try:
-            success = self.db.update_booking(booking_id, booking_data)
+            success = self.db.update_booking(booking_id, merged_data)
             if success:
                 print(f"Booking {booking_id} opdateret succesfuldt")
                 return {

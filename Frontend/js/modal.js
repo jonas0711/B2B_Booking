@@ -118,7 +118,7 @@ function populateForm(booking) {
     document.getElementById('own_room').checked = Boolean(booking.own_room);
     document.getElementById('foyer_required').checked = Boolean(booking.foyer_required);
     document.getElementById('tech_required').checked = Boolean(booking.tech_required);
-    document.getElementById('price_confirmed').checked = Boolean(booking.price_confirmed);
+    // price_confirmed felt er fjernet - arrangement_price brugt i stedet
     document.getElementById('ticket_price_sent').checked = Boolean(booking.ticket_price_sent);
     document.getElementById('extra_staff').checked = Boolean(booking.extra_staff);
     document.getElementById('staff_informed').checked = Boolean(booking.staff_informed);

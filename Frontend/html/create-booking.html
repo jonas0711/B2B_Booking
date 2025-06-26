@@ -66,6 +66,15 @@
                         </div>
                     </div>
 
+                    <!-- Biograf lokation - nyt felt -->
+                    <div class="form-group">
+                        <label class="form-label" for="cinema_location">Biograf</label>
+                        <select id="cinema_location" name="cinema_location" class="form-input">
+                            <option value="Kennedy">Kennedy</option>
+                            <option value="City Syd">City Syd</option>
+                        </select>
+                    </div>
+
                     <!-- Mail datoer -->
                     <div class="form-row">
                         <div class="form-group">
@@ -102,7 +111,67 @@
                     </div>
                 </div>
 
-                <!-- Bekræftelser og arrangementer sektion -->
+                <!-- Film sektion - omstruktureret til ja/nej spørgsmål -->
+                <div class="form-section">
+                    <h3 class="section-title">Film Information</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="film_required">Skal de se film?</label>
+                        <select id="film_required" name="film_required" class="form-input">
+                            <option value="0">Nej</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </div>
+
+                    <!-- Film titel (vises når film er valgt) -->
+                    <div class="form-group" id="filmTitleGroup" style="display: none;">
+                        <label class="form-label" for="film_title">Hvilken film</label>
+                        <input type="text" id="film_title" name="film_title" class="form-input" 
+                               placeholder="Indtast filmtitel">
+                    </div>
+                </div>
+
+                <!-- Forplejning sektion - tilføjet beskrivelse felt -->
+                <div class="form-section">
+                    <h3 class="section-title">Forplejning</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="catering_required">Forplejning nødvendig?</label>
+                        <select id="catering_required" name="catering_required" class="form-input">
+                            <option value="0">Nej</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </div>
+
+                    <!-- Forplejning detaljer (vises når forplejning er valgt) -->
+                    <div class="form-group" id="cateringDetailsGroup" style="display: none;">
+                        <label class="form-label" for="catering_details">Beskrivelse af forplejning</label>
+                        <textarea id="catering_details" name="catering_details" class="form-textarea" rows="3" 
+                                  placeholder="Beskriv forplejning behov..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Teknik sektion - ny struktur -->
+                <div class="form-section">
+                    <h3 class="section-title">Teknik</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="tech_required">Teknik nødvendig?</label>
+                        <select id="tech_required" name="tech_required" class="form-input">
+                            <option value="0">Nej</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </div>
+
+                    <!-- Teknik detaljer (vises når teknik er valgt) -->
+                    <div class="form-group" id="techDetailsGroup" style="display: none;">
+                        <label class="form-label" for="tech_details">Beskrivelse af teknik</label>
+                        <textarea id="tech_details" name="tech_details" class="form-textarea" rows="3" 
+                                  placeholder="Beskriv teknik behov..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Bekræftelser og arrangementer sektion - reduceret -->
                 <div class="form-section">
                     <h3 class="section-title">Bekræftelser & Arrangementer</h3>
                     
@@ -113,14 +182,6 @@
                             <label class="checkbox-label" for="time_confirmed">Kl - Bekræftet</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="film_confirmed" name="film_confirmed" value="1">
-                            <label class="checkbox-label" for="film_confirmed">Film - Bekræftet</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="catering_required" name="catering_required" value="1">
-                            <label class="checkbox-label" for="catering_required">Forplejning</label>
-                        </div>
-                        <div class="checkbox-group">
                             <input type="checkbox" id="own_room" name="own_room" value="1">
                             <label class="checkbox-label" for="own_room">Egen sal</label>
                         </div>
@@ -128,39 +189,23 @@
                             <input type="checkbox" id="foyer_required" name="foyer_required" value="1">
                             <label class="checkbox-label" for="foyer_required">Foyer</label>
                         </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="tech_required" name="tech_required" value="1">
-                            <label class="checkbox-label" for="tech_required">Teknik</label>
-                        </div>
-                    </div>
-
-                    <!-- Film titel (vises når film er bekræftet) -->
-                    <div class="form-group" id="filmTitleGroup">
-                        <label class="form-label" for="film_title">Hvilken film</label>
-                        <input type="text" id="film_title" name="film_title" class="form-input" 
-                               placeholder="Indtast filmtitel">
-                    </div>
-
-                    <!-- Forplejning detaljer (vises når forplejning er valgt) -->
-                    <div class="form-group" id="cateringDetailsGroup">
-                        <label class="form-label" for="catering_details">Forplejning detaljer</label>
-                        <textarea id="catering_details" name="catering_details" class="form-textarea" rows="2" 
-                                  placeholder="Beskriv forplejning behov..."></textarea>
                     </div>
                 </div>
 
-                <!-- Pris og betaling sektion -->
+                <!-- Pris og betaling sektion - ændret til input felt -->
                 <div class="form-section">
                     <h3 class="section-title">Pris & Betaling</h3>
                     
+                    <div class="form-group">
+                        <label class="form-label" for="arrangement_price">Pris på film/arrangement</label>
+                        <input type="number" id="arrangement_price" name="arrangement_price" class="form-input" 
+                               placeholder="Indtast pris" min="0" step="0.01">
+                    </div>
+                    
                     <div class="checkbox-grid">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="price_confirmed" name="price_confirmed" value="1">
-                            <label class="checkbox-label" for="price_confirmed">Pris på film/arrangement</label>
-                        </div>
-                        <div class="checkbox-group">
                             <input type="checkbox" id="ticket_price_sent" name="ticket_price_sent" value="1">
-                            <label class="checkbox-label" for="ticket_price_sent">Billetpris - sender vi den</label>
+                            <label class="checkbox-label" for="ticket_price_sent">Billetpris sendt til kunde</label>
                         </div>
                     </div>
                 </div>
@@ -199,16 +244,16 @@
                     <div class="form-group">
                         <label class="form-label" for="description">Beskrivelse/Noter</label>
                         <textarea id="description" name="description" class="form-textarea" rows="4" 
-                                  placeholder="Tilføj eventuelle detaljer eller noter til bookingen..."></textarea>
+                                  placeholder="Indtast eventuelle noter eller beskrivelser..."></textarea>
                     </div>
                 </div>
 
-                <!-- Knapper -->
+                <!-- Form handlinger -->
                 <div class="form-buttons">
-                    <a href="/" class="form-btn form-btn-secondary">
+                    <button type="button" class="form-btn form-btn-secondary" onclick="window.location.href='/'">
                         Annuller
-                    </a>
-                    <button type="submit" class="form-btn form-btn-primary" id="submitBtn">
+                    </button>
+                    <button type="submit" id="submitBtn" class="form-btn form-btn-primary">
                         Opret Booking
                     </button>
                 </div>
@@ -218,8 +263,43 @@
 
     <!-- JavaScript organiseret i separate filer -->
     <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
     <script src="../js/utils.js"></script>
+    <script src="../js/api.js"></script>
     <script src="../js/create-booking.js"></script>
+    
+    <script>
+        // Viser/skjuler film titel felt baseret på valg
+        document.getElementById('film_required').addEventListener('change', function() {
+            const filmTitleGroup = document.getElementById('filmTitleGroup');
+            if (this.value === '1') {
+                filmTitleGroup.style.display = 'block';
+            } else {
+                filmTitleGroup.style.display = 'none';
+                document.getElementById('film_title').value = '';
+            }
+        });
+
+        // Viser/skjuler forplejning detaljer baseret på valg
+        document.getElementById('catering_required').addEventListener('change', function() {
+            const cateringDetailsGroup = document.getElementById('cateringDetailsGroup');
+            if (this.value === '1') {
+                cateringDetailsGroup.style.display = 'block';
+            } else {
+                cateringDetailsGroup.style.display = 'none';
+                document.getElementById('catering_details').value = '';
+            }
+        });
+
+        // Viser/skjuler teknik detaljer baseret på valg
+        document.getElementById('tech_required').addEventListener('change', function() {
+            const techDetailsGroup = document.getElementById('techDetailsGroup');
+            if (this.value === '1') {
+                techDetailsGroup.style.display = 'block';
+            } else {
+                techDetailsGroup.style.display = 'none';
+                document.getElementById('tech_details').value = '';
+            }
+        });
+    </script>
 </body>
 </html> 
